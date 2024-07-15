@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <!-- Pickr CSS -->
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr@latest/dist/themes/classic.min.css">
+
+<!-- Pickr JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr@latest/dist/pickr.min.js"></script>
+
+
+<input type="text" id="color-picker" >
+<input type="hidden" id="colour" readonly >
+
+
+<script>
+    $(document).ready(function() {
+        const pickr = Pickr.create({
+            el: '#color-picker',
+            theme: 'classic', // or 'monolith', 'nano'
+            default: '#ff0000', // Default color
+            components: {
+                preview: true,
+                opacity: true,
+                hue: true,
+                interaction: {
+                    hex: true,
+                    rgba: false,
+                    hsla: false,
+                    input: true,
+                    save: true,
+                },
+            },
+        });
+
+        const selectedColorTextField = $('#colour');
+
+        // You can listen for the 'save' event to get the selected color
+        pickr.on('save', function(color,instance) {
+            const selectedColor = color.toHEXA().toString();
+            selectedColorTextField.val(selectedColor); // Update value of another field with selected color and text
+            instance.hide();
+        });
+    });
+</script>
+
+
+</body>
+</html>

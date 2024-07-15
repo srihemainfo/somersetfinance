@@ -1,0 +1,65 @@
+RewriteEngine on
+RewriteBase /
+
+
+
+# Redirect HTTP to HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Redirect non-www to www
+RewriteCond %{HTTP_HOST} !^www\. [NC]
+RewriteRule ^ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# RewriteEngine On
+# RewriteBase /
+
+# Remove .php extension from requested URLs
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.*)$ $1.php [L]
+
+# Redirect to remove .php if directly accessed
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s([^.]+)\.php [NC]
+RewriteRule ^ %1 [R=301,L]
+
+
+# Rewrite /home to index.php
+RewriteRule ^home/?$ index.php [L,NC]
+RewriteRule ^user-cars/?$ user-cars.php [L,NC]
+RewriteRule ^sell-your-car/?$ sell-your-car.php [L,NC]
+RewriteRule ^pco-hire/?$ pco-hire.php [L,NC]
+
+# RewriteEngine on
+# RewriteBase /
+
+# <IfModule mod_rewrite.c>
+# 	RewriteCond %{HTTPS} off
+# 	RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# 	RewriteCond %{HTTP_HOST} !^www\. [NC]
+# 	RewriteRule (.*) https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# </IfModule>
+# RewriteRule ^home/?$ index.php [L,NC]
+# RewriteRule ^booking/?$ booking.php [L,NC]
+# RewriteRule ^thanks/?$ thanks.php [L,NC]
+# RewriteRule ^contact/?$ contact.php [L,NC]
+# RewriteRule ^about/?$ about.php [L,NC]
+# RewriteRule ^service/?$ service.php [L,NC]
+# RewriteRule ^fleet/?$ fleet.php [L,NC]
+# RewriteRule ^faq/?$ faq.php [L,NC]
+# RewriteRule ^terms/?$ terms.php [L,NC]
+# RewriteRule ^privacy/?$ privacy.php [L,NC]
+# RewriteRule ^heathrow/?$ heathrow.php [L,NC]
+# RewriteRule ^stansted/?$ stansted.php [L,NC]
+# RewriteRule ^gatwick/?$ gatwick.php [L,NC]
+# RewriteRule ^luton/?$ luton.php [L,NC]
+# RewriteRule ^sutton/?$ sutton.php [L,NC]
+# RewriteRule ^webhook/?$ webhook.php [L,NC]
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# Set the “ea-php82” package as the default “PHP” programming language.
+<IfModule mime_module>
+  AddHandler application/x-httpd-ea-php82___lsphp .php .php8 .phtml
+</IfModule>
+# php -- END cPanel-generated handler, do not edit
