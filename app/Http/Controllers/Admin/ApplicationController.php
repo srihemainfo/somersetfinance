@@ -171,16 +171,16 @@ class ApplicationController extends Controller
         $search = $request->search;
 
         if ($search == '') {
-            $clients = CustomDetail::orderby('f_name', 'asc')->select('id', 'f_name')->distinct()->limit(6)->get();
+            $clients = CustomDetail::orderby('name', 'asc')->select('id', 'name')->distinct()->limit(6)->get();
         } else {
-            $clients = CustomDetail::orderby('f_name', 'asc')->select('id', 'f_name')->where('f_name', 'like', '%' . $search . '%')->distinct()->limit(6)->get();
+            $clients = CustomDetail::orderby('name', 'asc')->select('id', 'name')->where('name', 'like', '%' . $search . '%')->distinct()->limit(6)->get();
         }
 
         $response = [];
         foreach ($clients as $client) {
             $response[] = array(
                 "id" => $client->id,
-                "text" => $client->f_name
+                "text" => $client->name
             );
         }
         return response()->json($response);
@@ -198,15 +198,15 @@ class ApplicationController extends Controller
 
     public function customerStore(Request $request)
     {
-        
+
 
         $validator = Validator::make($request->all(), [
-            "first_name" => ["required"],
+            "name" => ["required"],
             // "cmpny_name" => ["required"],
-            'email' => ["nullable", "email", Rule::unique('customer_details')->ignore($request->customer_id)],
+            'email' => ["required", "email", Rule::unique('customer_details')->ignore($request->customer_id)],
             "phone" => ["required", "numeric", Rule::unique('customer_details')->ignore($request->customer_id)],
             "address1" => ["nullable"],
-            "remarks" => ["nullable"],
+            // "remarks" => ["nullable"],
         ]);
 
         if ($validator->fails()) {
@@ -218,12 +218,12 @@ class ApplicationController extends Controller
             $data = CustomDetail::updateOrCreate(
                 ['id' => $request->customer_id],
                 [
-                    'name' => $request->first_name,
+                    'name' => $request->name,
                     // 'company_name' => $request->cmpny_name,
                     'phone' => $request->phone,
                     'email' => $request->email,
                     'address1' => $request->address1,
-                    'remark' => $request->remarks,
+                    // 'remark' => $request->remarks,
                 ]
             );
 

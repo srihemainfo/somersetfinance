@@ -1,6 +1,64 @@
 <script>
     var $loading = $('.loading-overlay');
     $(function() {
+
+
+        let coApplicantIndex = 0;
+
+        $('#addCoApplicantButton').click(function() {
+            coApplicantIndex++;
+            $('#coApplicantsSection').append(`
+        <div class="co-applicant col-sm-12" id="coApplicant${coApplicantIndex}">
+            <h5>Co-Applicant ${coApplicantIndex}</h5>
+            <div class="row">
+                <div class="col-sm-4">
+                    <label for="co_applicant_name_${coApplicantIndex}" class="col-form-label">Client Name <span class="required">*</span></label>
+                    <input type="text" id="co_applicant_name_${coApplicantIndex}" name="co_applicants[${coApplicantIndex}][name]" class="form-control" placeholder="Enter client name">
+                    <p class="text-danger invalid-client-name"></p>
+                </div>
+                <div class="col-sm-4">
+                    <label for="co_applicant_email_${coApplicantIndex}" class="col-form-label">Email</label>
+                    <input type="email" id="co_applicant_email_${coApplicantIndex}" name="co_applicants[${coApplicantIndex}][email]" class="form-control" placeholder="Enter client email">
+                    <p class="text-danger invalid-client-email"></p>
+                </div>
+                <div class="col-sm-4">
+                    <label for="co_applicant_mobile_${coApplicantIndex}" class="col-form-label">Mobile <span class="required">*</span></label>
+                    <input type="text" id="co_applicant_mobile_${coApplicantIndex}" name="co_applicants[${coApplicantIndex}][phone]" class="form-control" placeholder="Enter client mobile">
+                    <p class="text-danger invalid-client-mobile"></p>
+                </div>
+            </div>
+            <button type="button" class="btn btn-danger removeCoApplicantButton" data-index="${coApplicantIndex}">Remove</button>
+            <hr>
+        </div>
+    `);
+        });
+
+
+
+        // <div class="co-applicant" id="coApplicant${coApplicantIndex}">
+        //             <h5>Co-Applicant ${coApplicantIndex}</h5>
+        //             <div class="form-group">
+        //                 <label for="co_applicant_name_${coApplicantIndex}">Name</label>
+        //                 <input type="text" class="form-control" id="co_applicant_name_${coApplicantIndex}" name="co_applicants[${coApplicantIndex}][name]">
+        //             </div>
+        //             <div class="form-group">
+        //                 <label for="co_applicant_email_${coApplicantIndex}">Email</label>
+        //                 <input type="email" class="form-control" id="co_applicant_email_${coApplicantIndex}" name="co_applicants[${coApplicantIndex}][email]">
+        //             </div>
+        //             <div class="form-group">
+        //                 <label for="co_applicant_phone_${coApplicantIndex}">Phone</label>
+        //                 <input type="text" class="form-control" id="co_applicant_phone_${coApplicantIndex}" name="co_applicants[${coApplicantIndex}][phone]">
+        //             </div>
+        //             <button type="button" class="btn btn-danger removeCoApplicantButton" data-index="${coApplicantIndex}">Remove</button>
+        //         </div>
+
+        // Remove co-applicant section
+        $(document).on('click', '.removeCoApplicantButton', function() {
+            let index = $(this).data('index');
+            $(`#coApplicant${index}`).remove();
+        });
+
+
         //Allowed places for autofill address
         // const auto_fill_places = ['Airports', 'Seaports', 'Hotels', 'Southampton Hotels',
         //     'Heathrow Airport Hotels', 'Train stations'
@@ -82,7 +140,7 @@
         })
 
 
-           // Ajax for Save New Client
+        // Ajax for Save New Client
         $('#saveBtn').click(function(e) {
             e.preventDefault();
 
@@ -142,22 +200,44 @@
         });
 
         function ClientModal_ShowErrors(errors) {
-        if (errors.name) {
-            $('.invalid-name').text(errors.name);
+            if (errors.name) {
+                $('.invalid-name').text(errors.name);
+            }
+            if (errors.phone) {
+                $('.invalid-phone-no').text(errors.phone);
+            }
+            if (errors.email) {
+                $('.invalid-email').text(errors.email);
+            }
         }
-        if (errors.phone) {
-            $('.invalid-phone-no').text(errors.phone);
-        }
-        if (errors.email) {
-            $('.invalid-email').text(errors.email);
-        }
-    }
 
-    function ClientModal_ResetErrors() {
-        $('.invalid-name, .invalid-phone-no, .invalid-email').text('');
-    }
+        function ClientModal_ResetErrors() {
+            $('.invalid-name, .invalid-phone-no, .invalid-email').text('');
+        }
 
-    <?php /*
+        function ShowClientInfo(data) {
+            $('#client_info').empty()
+
+            $('#client_info').html(
+                `<div class="col-sm-4">
+                <label for="client_name" class="col-form-label">Client Name <span class="required">*</span></label>
+                <input type="text" id="client_name" name="client_name" class="form-control" value="${data.name}" placeholder="Enter client name">
+                <p class="text-danger invalid-client-name"></p>
+            </div>
+            <div class="col-sm-4">
+                <label for="client_email" class="col-form-label">Email</label>
+                <input type="text" id="client_email" name="client_email" class="form-control" value="${data.email}" placeholder="Enter client email">
+                <p class="text-danger invalid-client-email"></p>
+            </div>
+            <div class="col-sm-4">
+                <label for="client_mobile" class="col-form-label">Mobile <span class="required">*</span></label>
+                <input type="text" id="client_mobile" name="client_mobile" class="form-control" value="${data.phone}" placeholder="Enter client mobile">
+                <p class="text-danger invalid-client-mobile"></p>
+            </div>`
+            )
+        }
+
+        <?php /*
 
 
         // $('#customer_sms_send_btn').click(function() {
@@ -1041,7 +1121,8 @@
         //     })
         // @endif
 
-        */ ?>
+        */
+        ?>
     })
 
     <?php /*
@@ -1864,6 +1945,6 @@
     //         $('#return_distance').val('')
     //         $('#return_travel_time').val('')
     //     }
-    // } */ ?>
-
+    // } */
+    ?>
 </script>
