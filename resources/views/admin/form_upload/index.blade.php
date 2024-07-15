@@ -8,24 +8,24 @@
             width: 100% !important;
         }
     </style>
-
+    @can('form_upload_access')
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
             <button class="btn btn-outline-success" onclick="openModal()">
-                Add Document Type
+                Add Form Upload
             </button>
 
         </div>
     </div>
-
+    @endcan
     <div class="card">
         <div class="card-header">
-            Document Type List
+            Document Form Upload List
         </div>
 
         <div class="card-body">
             <table
-                class=" table table-bordered table-striped table-hover ajaxTable datatable datatable-ToolssyllabusYear text-center">
+                class=" table table-bordered table-striped table-hover ajaxTable datatable datatable-formUpload text-center">
                 <thead>
                     <tr>
                         <th width="10">
@@ -41,6 +41,9 @@
                             Title
                         </th>
                         <th>
+                            Image
+                        </th>
+                        <th>
                             Action
                         </th>
                     </tr>
@@ -53,7 +56,7 @@
 
 
 
-        <div class="modal" tabindex="-1" id="regulationModal">
+        <div class="modal" tabindex="-1" id="formUploadModal">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -62,6 +65,8 @@
                     </div>
                     <div class="modal-body">
                         <div class="row gutters">
+
+                            <form id="uploadForm" enctype="multipart/form-data">
 
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 form-group">
                                 <label for="loan_type_id" class="required">Loan Type</label>
@@ -78,19 +83,27 @@
 
 
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 form-group">
-                                <label for="model" class="required">Document Type</label>
-                                <input type="hidden" name="document_type_id" id="document_type_id" value="">
+                                <label for="title" class="required">Document Type</label>
+                                <input type="hidden" name="form_upload_id" id="form_upload_id" value="">
                                 <input type="text" class="form-control" id="title" name="title" value="">
                                 <span id="title_span" class="text-danger text-center"
                                     style="display:none;font-size:0.9rem;"></span>
                             </div>
+
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 form-group">
+                                <label for="file_name" class="required">Form image</label>
+                                <input type="file" class="form-control" id="file_name" name="file_name" value="" accept="image/*,application/pdf">
+                                <span id="file_name_span" class="text-danger text-center"
+                                    style="display:none;font-size:0.9rem;"></span>
+                            </div>
+                        </form>
 
                         </div>
                     </div>
                     <div class="modal-footer">
                         <div id="save_div">
                             <button type="button" id="save_btn" class="btn btn-outline-success"
-                                onclick="saveRegulation()">Save</button>
+                                onclick="saveFormUpload()">Save</button>
                         </div>
                         <div id="loading_div">
                             <span class="theLoader"></span>
@@ -99,39 +112,6 @@
                 </div>
             </div>
         </div>
-
-        {{-- <div class="modal fade" id="regulationModal" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" style="outline: none;" class="close" data-bs-dismiss="modal">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row gutters">
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 form-group">
-                                <label for="model" class="required">model</label>
-                                <input type="hidden" name="model_id" id="model_id" value="">
-                                <input type="text" class="form-control" style="text-transform:uppercase" id="model"
-                                    name="model" value="">
-                                <span id="brand_id_span" class="text-danger text-center"
-                                    style="display:none;font-size:0.9rem;"></span>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <div id="save_div">
-                            <button type="button" id="save_btn" class="btn btn-outline-success"
-                                onclick="saveRegulation()">Save</button>
-                        </div>
-                        <div id="loading_div">
-                            <span class="theLoader"></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
 
 
 @endsection
@@ -177,7 +157,7 @@
                                         'x-csrf-token': _token
                                     },
                                     method: 'POST',
-                                    url: "{{ route('admin.model.massDestroy') }}",
+                                    url: "{{ route('admin.form_upload.massDestroy') }}",
                                     data: {
                                         ids: ids,
                                         _method: 'DELETE'
@@ -194,14 +174,14 @@
             }
             dtButtons.push(deleteButton)
 
-            if ($.fn.DataTable.isDataTable('.datatable-ToolssyllabusYear')) {
-                $('.datatable-ToolssyllabusYear').DataTable().destroy();
+            if ($.fn.DataTable.isDataTable('.datatable-formUpload')) {
+                $('.datatable-formUpload').DataTable().destroy();
             }
             let dtOverrideGlobals = {
                 buttons: dtButtons,
                 retrieve: true,
                 aaSorting: [],
-                ajax: "{{ route('admin.model.index') }}",
+                ajax: "{{ route('admin.form_upload.index') }}",
                 columns: [{
                         data: 'placeholder',
                         name: 'placeholder'
@@ -211,13 +191,17 @@
                         name: 'id'
                     },
                     {
-                        data: 'brand_id',
-                        name: 'brand_id'
+                        data: 'loan_type_id',
+                        name: 'loan_type_id'
                     },
-                    // {
-                    //     data: 'model',
-                    //     name: 'model'
-                    // },
+                    {
+                        data: 'title',
+                        name: 'title'
+                    },
+                    {
+                        data: 'file_name',
+                        name: 'file_name'
+                    },
                     {
                         data: 'actions',
                         name: 'actions'
@@ -229,7 +213,7 @@
                 ],
                 pageLength: 10,
             };
-            let table = $('.datatable-ToolssyllabusYear').DataTable(dtOverrideGlobals);
+            let table = $('.datatable-formUpload').DataTable(dtOverrideGlobals);
             $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e) {
                 $($.fn.dataTable.tables(true)).DataTable()
                     .columns.adjust();
@@ -239,47 +223,77 @@
 
         function openModal() {
 
-            $("#model").val('')
-            $("#model_id").val('')
-            $("#brand_id").val('').prop('disabled', false).select2()
+            $("#title").val('')
+            $("#form_upload_id").val('')
+            $("#file_name").val('')
+            $("#loan_type_id").val('').prop('disabled', false).select2()
             $("#loading_div").hide();
             $("#save_btn").html(`Save`);
             $("#save_div").show();
-            $("#regulationModal").modal('show');
+            $("#formUploadModal").modal('show');
         }
 
-        function saveRegulation() {
-            $("#brand_id_span").html('');
-            $("#model_span").html('');
+        function saveFormUpload() {
+            $("#loan_type_id_span").html('');
+            $("#title_span").html('');
+            $("#fiel_name_span").html('');
+
+
+            // let image = $('#file_name')[0].files[0];
+            // if (!image) {
+            //     Swal.fire('', 'Please select an image to upload.', 'error');
+            //     return;
+            // }
 
             $("#loading_div").hide();
-            if ($("#brand_id").val() == '') {
-                $("#brand_id_span").html(`Brand Is Required.`);
-                $("#brand_id_span").show();
+            if ($("#loan_type_id").val() == '') {
+                $("#loan_type_id_span").html(`Loan Type is Required.`);
+                $("#loan_type_id_span").show();
 
             } else
-            if ($("#model").val() == '') {
-                $("#model_span").html(`Model Is Required.`);
-                $("#model_span").show();
-            } else {
+            if ($("#title").val() == '') {
+                $("#title_span").html(`Document is Required.`);
+                $("#title_span").show();
+            }
+
+            else
+            if (!$('#file_name')[0].files[0] && $('#form_upload_id').val() == '' ) {
+
+                $("#fiel_name_span").html(`Form image is Required.`);
+                $("#fiel_name_span").show();
+            }
+
+            else {
                 $("#save_div").hide();
-                $("#brand_id_span").hide();
-                $("#model_span").hide();
+                $("#loan_type_id_span").hide();
+                $("#title_span").hide();
                 $("#loading_div").show();
-                let id = $("#model_id").val();
-                let model = $("#model").val();
-                let brand_id = $("#brand_id").val();
+                // let id = $("#form_upload_id").val();
+                // let title = $("#title").val();
+                // let loan_type_id = $("#loan_type_id").val();
+
+
+                let title = $('#title').val();
+                let loan_type_id = $('#loan_type_id').val();
+                let id = $('#form_upload_id').val();
+                let image = $('#file_name')[0].files[0];
+
+                let formData = new FormData();
+                formData.append('title', title);
+                formData.append('loan_type_id', loan_type_id);
+                formData.append('id', id);
+                formData.append('file_name', image);
+
+
                 $.ajax({
-                    url: "{{ route('admin.model.store') }}",
+                    url: "{{ route('admin.form_upload.store') }}",
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    data: {
-                        'model': model,
-                        'brand_id': brand_id,
-                        'id': id
-                    },
+                    data: formData,
+                    contentType: false,
+                    processData: false,
                     success: function(response) {
                         let status = response.status;
                         if (status == true) {
@@ -287,7 +301,7 @@
                         } else {
                             Swal.fire('', response.data, 'error');
                         }
-                        $("#regulationModal").modal('hide');
+                        $("#formUploadModal").modal('hide');
                         callAjax();
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
@@ -308,13 +322,13 @@
             }
         }
 
-        function viewRegulation(id) {
+        function viewformUpload(id) {
             if (id == undefined) {
                 Swal.fire('', 'ID Not Found', 'warning');
             } else {
                 $('.secondLoader').show()
                 $.ajax({
-                    url: "{{ route('admin.model.view') }}",
+                    url: "{{ route('admin.form_upload.view') }}",
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -327,11 +341,11 @@
                         let status = response.status;
                         if (status == true) {
                             var data = response.data;
-                            $("#model_id").val(data.id);
-                            $("#brand_id").val(data.brand_id).prop('disabled', true).select2();
-                            $("#model").val(data.model);
+                            $("#form_upload_id").val(data.id);
+                            $("#loan_type_id").val(data.loan_type_id).prop('disabled', true).select2();
+                            $("#title").val(data.title);
                             $("#loading_div").hide();
-                            $("#regulationModal").modal('show');
+                            $("#formUploadModal").modal('show');
                         } else {
                             Swal.fire('', response.data, 'error');
                         }
@@ -354,14 +368,14 @@
             }
         }
 
-        function editRegulation(id) {
+        function editFormUpload(id) {
 
             if (id == undefined) {
                 Swal.fire('', 'ID Not Found', 'warning');
             } else {
                 $('.secondLoader').show()
                 $.ajax({
-                    url: "{{ route('admin.model.edit') }}",
+                    url: "{{ route('admin.form_upload.edit') }}",
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -375,13 +389,13 @@
                         if (status == true) {
                             var data = response.data;
 
-                            $("#model_id").val(data.id);
-                            $("#model").val(data.model);
-                            $("#brand_id").val(data.brand_id).prop('disabled', false).select2();
+                            $("#form_upload_id").val(data.id);
+                            $("#title").val(data.title);
+                            $("#loan_type_id").val(data.loan_type_id).prop('disabled', false).select2();
                             $("#save_btn").html(`Update`);
                             $("#save_div").show();
                             $("#loading_div").hide();
-                            $("#regulationModal").modal('show');
+                            $("#formUploadModal").modal('show');
                         } else {
                             Swal.fire('', response.data, 'error');
                         }
@@ -404,7 +418,7 @@
             }
         }
 
-        function deleteRegulation(id) {
+        function deleteFormUpload(id) {
             if (id == undefined) {
                 Swal.fire('', 'ID Not Found', 'warning');
             } else {
@@ -420,7 +434,7 @@
                     if (frameby.value) {
                         $('.secondLoader').show()
                         $.ajax({
-                            url: "{{ route('admin.model.delete') }}",
+                            url: "{{ route('admin.form_upload.delete') }}",
                             method: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

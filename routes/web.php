@@ -108,6 +108,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('document_type/delete', 'DocumenTypeController@destroy')->name('document_type.delete');
     Route::delete('document_type/destroy', 'DocumenTypeController@massDestroy')->name('document_type.massDestroy');
 
+    Route::get('form_upload', 'FormUploadController@index')->name('form_upload.index');
+    Route::post('form_upload/view', 'FormUploadController@view')->name('form_upload.view');
+    Route::post('form_upload/edit', 'FormUploadController@edit')->name('form_upload.edit');
+    Route::post('form_upload/store', 'FormUploadController@store')->name('form_upload.store');
+    Route::post('form_upload/delete', 'FormUploadController@destroy')->name('form_upload.delete');
+    Route::delete('form_upload/destroy', 'FormUploadController@massDestroy')->name('form_upload.massDestroy');
+
 
 
     Route::get('application', 'ApplicationController@index')->name('application.index');

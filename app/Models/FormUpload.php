@@ -10,12 +10,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-class DocumentType extends Model
+class FormUpload extends Model
 {
     use SoftDeletes, HasFactory;
 
 
-    protected $table = 'document_types';
+    protected $table = 'form_uploads';
     protected $dates = [
         'created_at',
         'updated_at',
@@ -23,7 +23,7 @@ class DocumentType extends Model
     ];
 
 
-    protected $fillable = ['title','loan_type_id','created_at','updated_at','deleted_at'];
+    protected $fillable = ['title','loan_type_id','created_at','updated_at','deleted_at','file_name'];
 
     public function loanType()
     {

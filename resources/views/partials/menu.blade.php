@@ -182,10 +182,10 @@
                     </a>
                 </li>
 
-                @can('enquire_access')
+                @can('tools_access')
                 <li
-                    class="nav-item has-treeview {{ request()->is('admin/model*') ? 'menu-open' : '' }}  {{ request()->is('admin/seller_enquire*') ? 'menu-open' : '' }}  ">
-                    <a class="nav-link nav-dropdown-toggle {{ request()->is('admin/model*') ? 'active' : '' }} {{ request()->is('admin/seller_enquire*') ? 'menu-open' : '' }}  "
+                    class="nav-item has-treeview {{ request()->is('admin/loanType*') ? 'menu-open' : '' }}  {{ request()->is('admin/document_type*') ? 'menu-open' : '' }}  ">
+                    <a class="nav-link nav-dropdown-toggle {{ request()->is('admin/loanType*') ? 'active' : '' }} {{ request()->is('admin/document_type*') ? 'menu-open' : '' }}  "
                         href="#">
                         <i class="fa-fw nav-icon fas fa-pencil-ruler">
 
@@ -196,7 +196,7 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview" style=" ">
-                    @can('brand_access')
+                    @can('loan_type_access')
                                 <li class="nav-item">
                                     <a href="{{ route('admin.loanType.index') }}"
                                         class="nav-link {{ request()->is('admin/loanType') || request()->is('admin/loanType*') ? 'active' : '' }}">
@@ -210,10 +210,10 @@
                     @endcan
 
 
-                    @can('brand_access')
+                    @can('document_type_access')
                                 <li class="nav-item">
-                                    <a href="{{ route('admin.brand.index') }}"
-                                        class="nav-link {{ request()->is('admin/brand') || request()->is('admin/brand*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.document_type.index') }}"
+                                        class="nav-link {{ request()->is('admin/document_type') || request()->is('admin/document_type*') ? 'active' : '' }}">
                                         <i class="fas nav-icon fa-upload">
                                         </i>
                                         <p>
@@ -221,7 +221,20 @@
                                         </p>
                                     </a>
                                 </li>
-                            @endcan
+                    @endcan
+
+                    @can('form_upload_access')
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.form_upload.index') }}"
+                                        class="nav-link {{ request()->is('admin/form_upload') || request()->is('admin/form_upload*') ? 'active' : '' }}">
+                                        <i class="fas nav-icon fa-upload">
+                                        </i>
+                                        <p>
+                                            Form Upload
+                                        </p>
+                                    </a>
+                                </li>
+                    @endcan
                     </ul>
                 </li>
                 @endcan
