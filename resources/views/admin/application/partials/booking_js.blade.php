@@ -26,6 +26,11 @@
                     <input type="text" id="co_applicant_mobile_${coApplicantIndex}" name="co_applicants[${coApplicantIndex}][phone]" class="form-control" placeholder="Enter client mobile">
                     <p class="text-danger invalid-client-mobile"></p>
                 </div>
+                <div class="col-sm-4">
+                    <label for="co_applicant_address1_${coApplicantIndex}" class="col-form-label">Mobile <span class="required">*</span></label>
+                    <input type="text" id="co_applicant_address1_${coApplicantIndex}" name="co_applicants[${coApplicantIndex}][address1]" class="form-control" placeholder="Enter client mobile">
+                    <p class="text-danger invalid-client-mobile"></p>
+                </div>
             </div>
             <button type="button" class="btn btn-danger removeCoApplicantButton" data-index="${coApplicantIndex}">Remove</button>
             <hr>
