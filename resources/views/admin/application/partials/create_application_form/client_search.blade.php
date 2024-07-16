@@ -49,6 +49,22 @@
         <button type="button" id="addCoApplicantButton" class="btn btn-primary">Add Co-Applicant</button>
         <button type="submit" class="btn btn-success">Submit</button>
 
+    </div>
+</div>
+
+
+<div class="col-sm-12 main-card mb-3 card">
+    <div class="card-body">
+
+        <!-- Co-Applicants Section -->
+        {{-- <div id="coApplicantsSection">
+            <h4>Co-Applicants</h4>
+            <!-- Co-Applicant details will be appended here -->
+        </div>
+
+        <button type="button" id="addCoApplicantButton" class="btn btn-primary">Add Co-Applicant</button>
+        <button type="submit" class="btn btn-success">Submit</button> --}}
+
         <div class="card-header">
             <h4 class="card-title">Client Details</h4>
         </div>
