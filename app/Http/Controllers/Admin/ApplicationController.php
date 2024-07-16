@@ -198,7 +198,7 @@ class ApplicationController extends Controller
 
     public function customerStore(Request $request)
     {
-        
+
 
         $validator = Validator::make($request->all(), [
             "first_name" => ["required"],
@@ -231,7 +231,9 @@ class ApplicationController extends Controller
         }
     }
 
-
+public function test(Request $request){
+    
+}
 
 
 }
