@@ -1,5 +1,8 @@
 <style>
-    .select2 {
+    .select3 {
+        width: 100% !important;
+    }
+    .select2-container--default{
         width: 100% !important;
     }
 </style>
@@ -332,7 +335,7 @@
                 <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12 form-group" id='document_types_container'>
                     <label for="document_id" class="required">Documents</label>
 
-                    <select name="document_id[]" id="document_id" class='form-control select2' multiple>
+                    <select name="document_id[]" id="document_id" class='form-control select2 select3' multiple>
 
 
                     </select>
@@ -350,11 +353,11 @@
 </div>
 
 <div class="col-sm-12 main-card mb-3 card" id='formupload_container' style='display:none'>
-    <div class="card-body">
 
-        <div class="card-header">
-            <h4 class="card-title">Choose the formupload Type</h4>
-        </div>
+
+    <div class="card-header">
+        <h4 class="card-title">Choose the formupload Type</h4>
+    </div>
         <div class="card-body">
             <div class="row" id='formupload_type_data'>
 
@@ -365,7 +368,7 @@
                 <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12 form-group" id='form_upload_container'>
                     <label for="form_upload_id" class="required">Form Upload</label>
 
-                    <select name="form_upload_id[]" id="form_upload_id" class='form-control select2' multiple>
+                    <select name="form_upload_id[]" id="form_upload_id" class='form-control select2 select3' multiple>
 
 
                     </select>
@@ -393,12 +396,15 @@
 
 
         </div>
+
     </div>
 
-    <button class="btn btn-success" id="book_now">Submit Now</button>
+    <div class="col-sm-12 main-card mb-3 card">
+        <div class="card-body">
+         <button class="btn btn-success" id="book_now">Submit Now</button>
+        </div>
+    </div>
 
 
-
-</div>
 
 

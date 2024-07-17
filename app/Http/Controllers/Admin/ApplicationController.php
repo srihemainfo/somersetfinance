@@ -16,7 +16,17 @@ use App\Models\{
     CustomDetail,
     Brand,
     FormUpload,
-    DocumentType
+    DocumentType,
+    Application,
+    CoApplicant,
+    ApplicationCoapplicant,
+    ApplicationDocument,ApplicationLoanDocument,
+    ApplicationFormUpload,
+    ApplicationLoanFormUpload,
+    AdditionalDocument,
+    ApplicationAdditional
+
+
 };
 // use App\Http\Controllers\AllDataController;
 use Yajra\DataTables\Facades\DataTables;
@@ -104,7 +114,163 @@ class ApplicationController extends Controller
     public function store(Request $request)
     {
 
-        dd($request);
+
+        $customer_id = $request->client_id ;
+        // $customer_id = $request->client_id ;
+        $co_applicants = $request->co_applicants_name;
+        $co_applicants_emails = $request->co_applicants_email;
+        $co_applicants_phones = $request->co_applicants_phone;
+        $co_applicants_addresss = $request->co_applicants_address;
+        $loan_type_id = $request->loan_type_id;
+
+        $document_features = $request->document_features;
+        $document_type_ids = $request ->document_id;
+
+        $form_upload_ids = $request->form_upload_id;
+        $uploadForm_features = $request->uploadForm_features;
+
+        $addition_documents = $request->addition_document;
+
+        // Application::where(['customer_id'=> $customer_id]) ;
+
+        $applicant =  Application::create([
+            'customer_id'=> $customer_id,
+            'loan_type_id' => $loan_type_id
+        ]) ;
+        // dd($applicant);
+
+        if($applicant){
+
+            $id = $applicant->id;
+
+
+            for($si=0; $si < count($co_applicants); $si++ ){
+             $check_co_applicant =   CoApplicant::where(['name'=> $co_applicants[$si],'email'=> $co_applicants_emails[$si], 'phone'=>$co_applicants_phones[$si], 'address'=>$co_applicants_addresss[$si]])->first();
+                if( !$check_co_applicant){
+                    $check_co_applicant =  CoApplicant::create(['name'=> $co_applicants[$si],'email'=> $co_applicants_emails[$si], 'phone'=>$co_applicants_phones[$si], 'address'=>$co_applicants_addresss[$si]]);
+                }
+                $check_ApplicationCoapplicant= ApplicationCoapplicant::where(['application_detail_id' => $id, 'co_applicant_id'=> $check_co_applicant->id])->first();
+                if(!$check_ApplicationCoapplicant){
+                    ApplicationCoapplicant::create(['application_detail_id' => $id, 'co_applicant_id'=> $check_co_applicant->id]);
+                }
+            }
+
+
+            // with loan_type_id
+            if(isset($document_features) && count($document_features ) > 0){
+
+                $applicant->applicationLoanDocument2()->detach($document_features);
+
+                $applicant->applicationLoanDocument2()->attach($document_features);
+                // dd('test');
+
+                // foreach($document_features as $document_feature){
+
+                //     $check_Documents= ApplicationLoanDocument::where(['application_id' => $id, 'document_id'=> $document_feature])->first();
+                //     if(!$check_Documents){
+                //         ApplicationLoanDocument::create(['application_id' => $id, 'document_id'=> $document_feature]);
+                //     }
+
+                // }
+            }
+
+            // without loan_type_id
+            if(isset($document_type_ids) && count($document_type_ids ) > 0){
+
+                $applicant->applicantDocument1()->detach($document_type_ids);
+                $applicant->applicantDocument1()->attach($document_type_ids);
+                // dd('test11');
+
+
+                // foreach($document_type_ids as $document_type_id){
+                //     // dd($id);
+
+                //     $check_Documents= ApplicationDocument::where(['application_id' => $id, 'document_id'=> $document_type_id])->first();
+                //     // dd($check_Documents);
+                //     if(!$check_Documents){
+                //         ApplicationDocument::create(['application_id' => $id, 'document_id'=> $document_type_id]);
+                //     }
+
+                // }
+            }
+
+
+            if(isset($uploadForm_features) && count($uploadForm_features ) > 0){
+
+                $applicant->applicantformUpload2()->attach($uploadForm_features);
+
+                // foreach($uploadForm_features as $form_upload_feature){
+
+                //     $check_Documents= ApplicationLoanFormUpload::where(['application_id' => $id, 'form_upload_id'=> $form_upload_feature])->first();
+                //     if(!$check_Documents){
+                //         ApplicationLoanFormUpload::create(['application_id' => $id, 'form_upload_id'=> $form_upload_feature]);
+                //     }
+
+                // }
+            }
+
+            // without loan_type_id
+            if(isset($form_upload_ids) && count($form_upload_ids ) > 0){
+
+                $applicant->applicationLoanFormUpload2()->attach($form_upload_ids);
+
+                // foreach($form_upload_ids as $form_upload_type_id){
+                //     // dd($id);
+
+                //     $check_Documents= ApplicationFormUpload::where(['application_id' => $id, 'form_upload_id'=> $form_upload_type_id])->first();
+                //     // dd($check_Documents);
+                //     if(!$check_Documents){
+                //         // dd($id);
+                //         ApplicationFormUpload::create(['application_id' => $id, 'form_upload_id'=> $form_upload_type_id]);
+                //     }
+
+                // }
+            }
+
+            // AdditionalDocument
+
+            if(isset($addition_documents ) && count($addition_documents) > 0){
+
+                foreach($addition_documents as $addition_document){
+
+                    $check_co_additional_doucment =   AdditionalDocument::where(['title'=> $addition_document])->first();
+                        if( !$check_co_additional_doucment){
+                            $check_co_additional_doucment =  AdditionalDocument::create(['title'=> $addition_document]);
+                        }
+                        // dd($check_co_additional_doucment->id);
+                        $check_applicationAdditioal= ApplicationAdditional::where(['application_id' => $id, 'additional_id'=> $check_co_additional_doucment->id])->first();
+                        if(!$check_applicationAdditioal){
+
+                            ApplicationAdditional::create(['application_id' => $id, 'additional_id'=> $check_co_additional_doucment->id]);
+                        }
+
+
+                    // dd($id);
+
+                    // $check_Documents= ApplicationFormUpload::where(['application_id' => $id, 'form_upload_id'=> $form_upload_type_id])->first();
+                    // // dd($check_Documents);
+                    // if(!$check_Documents){
+                    //     ApplicationFormUpload::create(['application_id' => $id, 'form_upload_id'=> $form_upload_type_id]);
+                    // }
+
+                }
+
+            }
+
+
+
+            $id = $applicant->id;
+            $application_id = 'App' . sprintf('%05d', $id) ;
+            $applicant->ref_no = $application_id ;
+            $applicant-> save();
+
+            dd('test');
+
+        }
+
+
+
+
 
 
 
@@ -266,7 +432,7 @@ class ApplicationController extends Controller
 
             foreach ($formUploads as $formUpload) {
                 $formUpload_content .= '<div class="form-group col-md-3">';
-                $formUpload_content .= '<input type="checkbox" name="document_features[]" value="' . $formUpload->id . '">';
+                $formUpload_content .= '<input type="checkbox" name="uploadForm_features[]" value="' . $formUpload->id . '">';
                 $formUpload_content .= '&nbsp;&nbsp;' . $formUpload->title . '<br>';
                 $formUpload_content .= '</div>';
             }
