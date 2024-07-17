@@ -299,15 +299,17 @@
             <ul class="navbar-nav ml-auto">
                 <li>
                     <div style="display: flex; gap:10px;">
+                        @can('case_create_access')
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item dropdown notifications-menu">
                                 <a href="{{route('admin.application.index')}}" class="new_booking nav-link nav_prof_label" style="background-color: #ff9c07; color: rgb(255, 255, 255); display: block;">
                                     <i class="fas fa-plus-circle"></i>
-                                     Application Create
+                                     Case Create
                                 </a>
                             </li>
                         </ul>
-
+                        @endcan
+                        @can('customer_create_access')
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item dropdown notifications-menu">
                                 <a href="{{route('admin.customerusers.index')}}" class="new_booking nav-link nav_prof_label" style="background-color: rgb(180 29 40); color: rgb(255, 255, 255); display: block;">
@@ -316,6 +318,7 @@
                                 </a>
                             </li>
                         </ul>
+                        @endcan
                     </div>
                 </li>
             </ul>

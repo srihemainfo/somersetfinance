@@ -127,13 +127,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('application/destroy', 'ApplicationController@massDestroy')->name('application.massDestroy');
 
 
-    Route::get('application-stage', 'ApplicationStageController@index')->name('application-stage.index');
-    Route::post('application-stage/view', 'ApplicationStageController@view')->name('application-stage.view');
-    Route::get('application-stage/edit/{id}', 'ApplicationStageController@edit')->name('application-stage.edit');
+    Route::get('case-list', 'ApplicationStageController@index')->name('application-stage.index');
+    Route::post('case-list/view', 'ApplicationStageController@view')->name('application-stage.view');
+    Route::get('case-list/edit/{id}', 'ApplicationStageController@edit')->name('application-stage.edit');
     // Route::post('application-stage/edit', 'ApplicationStageController@edit')->name('application-stage.edit');
-    Route::post('application-stage/store', 'ApplicationStageController@store')->name('application-stage.store');
-    Route::post('application-stage/delete', 'ApplicationStageController@destroy')->name('application-stage.delete');
-    Route::delete('application-stage/destroy', 'ApplicationStageController@massDestroy')->name('application-stage.massDestroy');
+    Route::post('case-list/store', 'ApplicationStageController@store')->name('application-stage.store');
+    Route::post('case-list/delete', 'ApplicationStageController@destroy')->name('application-stage.delete');
+    Route::delete('case-list/destroy', 'ApplicationStageController@massDestroy')->name('application-stage.massDestroy');
 
 
 

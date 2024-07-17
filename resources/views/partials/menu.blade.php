@@ -136,7 +136,7 @@
                     </li>
                 @endcan
 
-
+                @can('customer_create_access')
                 <li class="nav-item">
                     <a href="{{ route('admin.customerusers.index') }}"
                         class="nav-link {{ request()->is('admin/customerusers') || request()->is('admin/customerusers*') ? 'active' : '' }}">
@@ -147,6 +147,7 @@
                         </p>
                     </a>
                 </li>
+                @endcan
 
 
                 <!-- <li class="nav-item">
@@ -160,10 +161,10 @@
                     </a>
                 </li> -->
 
-
+                @can('case_access')
                 <li class="nav-item">
                     <a href="{{ route('admin.application-stage.index') }}"
-                        class="nav-link {{ request()->is('admin/application-stage') || request()->is('admin/application-stage*') ? 'active' : '' }}">
+                        class="nav-link {{ request()->is('admin/case-list') || request()->is('admin/case-list*') ? 'active' : '' }}">
                         <i class="fas nav-icon fa-vote-yea">
                         </i>
                         <p>
@@ -171,16 +172,19 @@
                         </p>
                     </a>
                 </li>
+                @endcan
 
+                {{-- @can('case_stage_access')
                 <li class="nav-item">
                     <a href="{{ route('admin.application.index') }}"
                         class="nav-link {{ request()->is('admin/application') || request()->is('admin/application*') ? 'active' : '' }}">
                         <i class="fas nav-icon fa-pencil-alt">
                         </i>
-                        <p>Application create
+                        <p>Case create
                         </p>
                     </a>
                 </li>
+                @endcan --}}
 
                 @can('tools_access')
 

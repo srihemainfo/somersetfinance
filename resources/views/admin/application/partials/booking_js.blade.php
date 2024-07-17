@@ -174,9 +174,26 @@
                     data: formData,
                     success: function(response) {
                         if (response.status) {
-                            // Handle success response
-                            $('#successMessage').html('Application submitted successfully.')
-                                .show();
+
+                            if(response.data){
+
+
+                                Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'Added',
+                                text: response.data,
+                                showConfirmButton: false,
+                                timer: 4000,
+                            })
+
+                            $('#bookingForm')[0].reset()
+                            $('#bookingForm select').val(null).trigger('change');
+
+                            }
+                            // // Handle success response
+                            // $('#successMessage').html('Application submitted successfully.')
+                            //     .show();
                             // Optionally, redirect or reset the form
                         } else {
                             // Handle error response

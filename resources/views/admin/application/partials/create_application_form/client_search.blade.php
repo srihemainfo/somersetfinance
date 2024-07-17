@@ -1,5 +1,5 @@
 <style>
-    .select3 {
+    .select2 {
         width: 100% !important;
     }
     .select2-container--default{
@@ -9,16 +9,16 @@
 <div class="col-sm-12 main-card mb-3 card">
     <div class="card-body">
 
-        <nav aria-label="breadcrumb">
+        {{-- <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('admin.application.index') }}">List Application</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ $isEditable ?? 'Create' }} Application</li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.application.index') }}">List Case</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ $isEditable ?? 'Create' }} Case</li>
             </ol>
-        </nav>
+        </nav> --}}
 
         <div class="card-header">
-            <h4 class="card-title">Application Form</h4>
+            <h4 class="card-title">Case Form</h4>
         </div>
         <div class="card-body">
             <div class="row" {{ $isEditable ?? 'hidden' }}>
@@ -385,7 +385,7 @@
                 <div class="col-sm-2 mb-1">
                     <button type="button" class="btn btn-primary add_addition_document" title="Add New Pickup Point"
                         style="position: absolute; bottom: 0;">
-                        <i class="fa fa-plus" aria-hidden="true"></i> &nbsp;&nbsp; Add Point
+                        <i class="fa fa-plus" aria-hidden="true"></i> &nbsp;&nbsp; Add Additioanl Document
                     </button>
                 </div>
             </div>

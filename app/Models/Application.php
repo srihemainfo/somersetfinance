@@ -66,7 +66,12 @@ class Application extends Model
 
     public function customerdetail()
     {
-        return $this->belongsTo(CustomDetail::class);
+        return $this->belongsTo(CustomDetail::class,'customer_id');
+    }
+
+    public function loanType()
+    {
+        return $this->belongsTo(LoanType::class,'loan_type_id');
     }
 
 
@@ -132,6 +137,11 @@ class Application extends Model
     {
        return $this->belongsToMany(AdditionalDocument::class, 'application_addition_document', 'application_id', 'additional_id')->withTimestamps();
    }
+
+   public function co_applicant1()
+    {
+        return $this->belongsToMany(CoApplicant::class, 'application_detail_co_applicant', 'application_detail_id', 'co_applicant_id')->withTimestamps();
+    }
 
 
 

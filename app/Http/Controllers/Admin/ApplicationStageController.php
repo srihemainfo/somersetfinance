@@ -15,6 +15,7 @@ use App\Models\{
     VehicleFeatures,
     Brand,
     Models,
+    Application
 };
 // use App\Http\Controllers\AllDataController;
 use Yajra\DataTables\Facades\DataTables;
@@ -38,47 +39,55 @@ class ApplicationStageController extends Controller
     {
 
 
-
-        // $alldatas = $this->allDataController->index();
-
         if ($request->ajax()) {
 
-            $query = Brand::query()->select(sprintf('*', (new Brand)->table));
+            $query = Application::query()->select('*');
             $table = Datatables::of($query);
-
-            // $query = Brand::query(); // Start building the query from the Brand model
-            // $table = Datatables::of($query);
-
-            // If you want to select all columns from the Brand table
-            // $table->select('*');
-
-            // $query = Brand::query()->select(sprintf('%s.*', (new Brand)->table));
-            // // dd( $query );
-            // $table = Datatables::of($query);
-
-            // dd($table );
-
-            // $query = Brand::query()->select(sprintf('%s.*', (new Brand)->table));
-            // $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
             $table->addColumn('actions', '&nbsp;');
 
+            $table->editColumn('customer_id', function ($row) {
+                if($row->customer_id){
+                    $customer_name = $row->customerdetail->name ?? '' ;
+                    $customer_email = $row->customerdetail->email ?? '' ;
+                    if($customer_name && $customer_email){
+                        return  $customer_name . '(' . $customer_email. ')' ;
+                    }else if($customer_name){
+                        return  $customer_name ;
+
+                    }
+                }
+                    return  '';
+            });
+
+            $table->editColumn('loan_type_id', function ($row) {
+                    return  $row->loanType->title ?? '';
+            });
+
+
+            $table->editColumn('address1', function ($row) {
+                return  $row->customerdetail->address1 ?? '';
+            });
+
+
+
+
             $table->editColumn('actions', function ($row) {
-                $viewFunct = 'viewRegulation';
-                $editFunct = 'editRegulation';
-                $deleteFunct = 'deleteRegulation';
-                $viewGate = 'brand_show'; // need to change gate permission
-                $editGate = 'brand_edit';
-                $deleteGate = 'brand_delete';
-                $crudRoutePart = 'subjects';
+                $viewFunct = 'viewCase';
+                $editFunct = 'editCase';
+                $deleteFunct = 'deleteCase';
+                $viewGate = 'case_show'; // need to change gate permission
+                $editGate = 'case_edit';
+                $deleteGate = 'case_delete';
+                // $crudRoutePart = 'subjects';
 
                 return view('partials.ajaxTableActions', compact(
 
                     'viewGate',
                 'editGate',
                 'deleteGate',
-                'crudRoutePart',
+                // 'crudRoutePart',
                 'viewFunct',
                 'editFunct',
                 'deleteFunct',
@@ -95,43 +104,44 @@ class ApplicationStageController extends Controller
 
         return view('admin.application_stage.index', compact('isEditable'));
 
-
-        // $adminid = Session::get('adminid');
-
-        // if (!(isset($adminid))) {
-        //     return Redirect::to("/");
-        // }
-
-        // $getmyprofiledatas     = DB::select("select * from adminusers where email = '" . $adminid . "' limit 0,1");
-        // $create_by             = $getmyprofiledatas[0]->id;
-
-        // $success                        = '';
-        // $currenttab                        = 1;
-        // $editid                            = '';
-        // $successtype                    = '';
-
-
-        // $alldatas['userinfo']             = Common::userinfo();
-        // $alldatas['toprightmenu']         = Common::toprightmenu();
-        // $alldatas['mainmenu']             = Common::mainmenu();
-        // $alldatas['footer']             = Common::footer();
-        // $alldatas['sidenavbar']         = Common::sidenavbar();
-        // $alldatas['rightsidenavbar']     = Common::rightsidenavbar();
-
-        // $alldatas['fetchalldepartment']     = Common::fetchalldepartment();
-
-
-        //     $LatestEvent = DB::table('sell_vehicle_details')->whereNull('deleted_at')->orderBy('shord_order', 'ASC')->get();
-
-
-        //     return view('lastevent.eventlist', compact('alldatas', 'LatestEvent'));
     }
 
     public function view(Request $request)
     {
         if (isset($request->id)) {
-            $data = Brand::where(['id' => $request->id])->select('id', 'brand')->first();
-            return response()->json(['status' => true, 'data' => $data]);
+            $id = $request->id;
+
+          $data =  Application::find($id) ;
+          if($data){
+
+            $customer_name =  $data->customerdetail->name  ?? '' ;
+            $customer_email = $data->customerdetail->email ?? '' ;
+            $customer_phone = $data->customerdetail->phone ?? '' ;
+            $customer_address = $data->customerdetail->address ?? '' ;
+
+            if($data->co_applicant1){
+
+                $coApplicants = $data->co_applicant1 ;
+
+                foreach($coApplicants as $coappicant){
+                    // dd($coApplicants);
+                }
+
+
+            }
+
+
+
+
+
+
+
+
+          }
+
+
+            // $data = Brand::where(['id' => $request->id])->select('id', 'brand')->first();
+            return response()->json(['status' => true, 'data' => true]);
         } else {
             return response()->json(['status' => false, 'data' => 'Required Details Not Found']);
         }

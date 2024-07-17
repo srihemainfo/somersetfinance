@@ -144,14 +144,31 @@ class ApplicationController extends Controller
             $id = $applicant->id;
 
 
+            // for($si=0; $si < count($co_applicants); $si++ ){
+            //  $check_co_applicant =   CoApplicant::where(['name'=> $co_applicants[$si],'email'=> $co_applicants_emails[$si], 'phone'=>$co_applicants_phones[$si], 'address'=>$co_applicants_addresss[$si]])->first();
+            //     if( !$check_co_applicant){
+            //         $check_co_applicant =  CoApplicant::create(['name'=> $co_applicants[$si],'email'=> $co_applicants_emails[$si], 'phone'=>$co_applicants_phones[$si], 'address'=>$co_applicants_addresss[$si]]);
+            //     }
+            //     $check_ApplicationCoapplicant= ApplicationCoapplicant::where(['application_detail_id' => $id, 'co_applicant_id'=> $check_co_applicant->id])->first();
+            //     if(!$check_ApplicationCoapplicant){
+            //         ApplicationCoapplicant::create(['application_detail_id' => $id, 'co_applicant_id'=> $check_co_applicant->id]);
+            //     }
+            // }
             for($si=0; $si < count($co_applicants); $si++ ){
-             $check_co_applicant =   CoApplicant::where(['name'=> $co_applicants[$si],'email'=> $co_applicants_emails[$si], 'phone'=>$co_applicants_phones[$si], 'address'=>$co_applicants_addresss[$si]])->first();
-                if( !$check_co_applicant){
-                    $check_co_applicant =  CoApplicant::create(['name'=> $co_applicants[$si],'email'=> $co_applicants_emails[$si], 'phone'=>$co_applicants_phones[$si], 'address'=>$co_applicants_addresss[$si]]);
-                }
-                $check_ApplicationCoapplicant= ApplicationCoapplicant::where(['application_detail_id' => $id, 'co_applicant_id'=> $check_co_applicant->id])->first();
-                if(!$check_ApplicationCoapplicant){
-                    ApplicationCoapplicant::create(['application_detail_id' => $id, 'co_applicant_id'=> $check_co_applicant->id]);
+                $check_co_applicant = CoApplicant::firstOrCreate(
+                    [
+                        'name' => $co_applicants[$si],
+                        'email' => $co_applicants_emails[$si],
+                        'phone' => $co_applicants_phones[$si],
+                        'address' => $co_applicants_addresss[$si]
+                    ]
+                );
+
+                $applicationDetail = Application::find($id);
+
+                // Attach the co-applicant if it doesn't already exist in the pivot table
+                if (!$applicationDetail->co_applicant1()->where('co_applicant_id', $check_co_applicant->id)->exists()) {
+                    $applicationDetail->co_applicant1()->attach($check_co_applicant->id);
                 }
             }
 
@@ -197,7 +214,8 @@ class ApplicationController extends Controller
 
             if(isset($uploadForm_features) && count($uploadForm_features ) > 0){
 
-                $applicant->applicantformUpload2()->attach($uploadForm_features);
+                $applicant->applicationLoanFormUpload2()->detach($uploadForm_features);
+                $applicant->applicationLoanFormUpload2()->attach($uploadForm_features);
 
                 // foreach($uploadForm_features as $form_upload_feature){
 
@@ -212,7 +230,10 @@ class ApplicationController extends Controller
             // without loan_type_id
             if(isset($form_upload_ids) && count($form_upload_ids ) > 0){
 
-                $applicant->applicationLoanFormUpload2()->attach($form_upload_ids);
+
+                $applicant->applicantformUpload2()->detach($form_upload_ids);
+                $applicant->applicantformUpload2()->attach($form_upload_ids);
+
 
                 // foreach($form_upload_ids as $form_upload_type_id){
                 //     // dd($id);
@@ -229,42 +250,62 @@ class ApplicationController extends Controller
 
             // AdditionalDocument
 
-            if(isset($addition_documents ) && count($addition_documents) > 0){
 
-                foreach($addition_documents as $addition_document){
+            if (isset($addition_documents) && count($addition_documents) > 0) {
+                foreach ($addition_documents as $addition_document) {
+                    // Check if the additional document exists or create it
+                    $check_co_additional_doucment = AdditionalDocument::firstOrCreate(['title' => $addition_document]);
 
-                    $check_co_additional_doucment =   AdditionalDocument::where(['title'=> $addition_document])->first();
-                        if( !$check_co_additional_doucment){
-                            $check_co_additional_doucment =  AdditionalDocument::create(['title'=> $addition_document]);
-                        }
-                        // dd($check_co_additional_doucment->id);
-                        $check_applicationAdditioal= ApplicationAdditional::where(['application_id' => $id, 'additional_id'=> $check_co_additional_doucment->id])->first();
-                        if(!$check_applicationAdditioal){
-
-                            ApplicationAdditional::create(['application_id' => $id, 'additional_id'=> $check_co_additional_doucment->id]);
-                        }
-
-
-                    // dd($id);
-
-                    // $check_Documents= ApplicationFormUpload::where(['application_id' => $id, 'form_upload_id'=> $form_upload_type_id])->first();
-                    // // dd($check_Documents);
-                    // if(!$check_Documents){
-                    //     ApplicationFormUpload::create(['application_id' => $id, 'form_upload_id'=> $form_upload_type_id]);
-                    // }
-
+                    // Attach the additional document to the application if it doesn't already exist in the pivot table
+                    $applicationDetail = Application::find($id);
+                    if (!$applicationDetail->additionalDocument2()->where('additional_id', $check_co_additional_doucment->id)->exists()) {
+                        $applicationDetail->additionalDocument2()->attach($check_co_additional_doucment->id);
+                    }
                 }
-
             }
 
 
 
+            // if(isset($addition_documents ) && count($addition_documents) > 0){
+
+            //     foreach($addition_documents as $addition_document){
+
+            //         $check_co_additional_doucment =   AdditionalDocument::where(['title'=> $addition_document])->first();
+            //             if( !$check_co_additional_doucment){
+            //                 $check_co_additional_doucment =  AdditionalDocument::create(['title'=> $addition_document]);
+            //             }
+            //             // dd($check_co_additional_doucment->id);
+            //             $check_applicationAdditioal= ApplicationAdditional::where(['application_id' => $id, 'additional_id'=> $check_co_additional_doucment->id])->first();
+            //             if(!$check_applicationAdditioal){
+
+            //                 ApplicationAdditional::create(['application_id' => $id, 'additional_id'=> $check_co_additional_doucment->id]);
+            //             }
+
+
+            //         // dd($id);
+
+            //         // $check_Documents= ApplicationFormUpload::where(['application_id' => $id, 'form_upload_id'=> $form_upload_type_id])->first();
+            //         // // dd($check_Documents);
+            //         // if(!$check_Documents){
+            //         //     ApplicationFormUpload::create(['application_id' => $id, 'form_upload_id'=> $form_upload_type_id]);
+            //         // }
+
+            //     }
+
+            // }
+
+
+
             $id = $applicant->id;
-            $application_id = 'App' . sprintf('%05d', $id) ;
+            $application_id = 'APP' . sprintf('%05d', $id) ;
             $applicant->ref_no = $application_id ;
             $applicant-> save();
 
-            dd('test');
+            $message = "Case Create Successful and application id is ". $application_id ;
+
+            return response()->json(['status' => true, 'data' => $message ]);
+
+            // dd('test');
 
         }
 
