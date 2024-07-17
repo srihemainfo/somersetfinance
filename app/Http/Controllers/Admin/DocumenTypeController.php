@@ -16,7 +16,8 @@ use App\Models\{
     Models,
     Brand,
     DocumentType,
-    LoanType
+    LoanType,
+    FormUpload
 };
 // use App\Http\Controllers\AllDataController;
 use Yajra\DataTables\Facades\DataTables;
@@ -25,7 +26,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 
 
-class ModelController extends Controller
+class DocumenTypeController extends Controller
 {
 
 
@@ -47,7 +48,7 @@ class ModelController extends Controller
         //     dd($model->Brand)
         // }
 
-        $brands = LoanType::pluck('title','id')->prepend('Select LoanType', '') ;
+        $loan_types = LoanType::pluck('title','id')->prepend('Select LoanType', '') ;
 
         // $alldatas = $this->allDataController->index();
 
@@ -77,8 +78,8 @@ class ModelController extends Controller
             // $query = Models::query()->select(sprintf('%s.*', (new Models)->table));
             // $table = Datatables::of($query);
 
-            // $table->editColumn('brand_id', function ($row) {
-            //     return $row->brand_id->Brand->brand ?? '';
+            // $table->editColumn('loan_type_id', function ($row) {
+            //     return $row->loan_type_id->Brand->brand ?? '';
             // });
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -106,17 +107,17 @@ class ModelController extends Controller
                 ));
             });
 
-            $table->editColumn('loan_type_id', function ($row) {
+            // $table->editColumn('loan_type_id', function ($row) {
 
-                return $row->loanType->title ??  '';
-            });
+            //     return $row->loanType->title ??  '';
+            // });
 
 
             $table->rawColumns(['actions', 'placeholder']);
             return $table->make(true);
         }
-
-        return view('admin.model.index', compact('brands'));
+            // $document_types = DocumentType::whereNotNull('title')->pluck('title', 'id')->
+        return view('admin.document_type.index', compact('loan_types'));
 
 
         // $adminid = Session::get('adminid');
@@ -153,7 +154,7 @@ class ModelController extends Controller
     public function view(Request $request)
     {
         if (isset($request->id)) {
-            $data = DocumentType::where(['id' => $request->id])->select('id', 'title', 'loan_type_id')->first();
+            $data = DocumentType::where(['id' => $request->id])->select('id', 'title')->first();
             return response()->json(['status' => true, 'data' => $data]);
         } else {
             return response()->json(['status' => false, 'data' => 'Required Details Not Found']);
@@ -162,40 +163,40 @@ class ModelController extends Controller
 
     public function store(Request $request)
     {
-        if (isset($request->title) &&  isset($request->loan_type_id) ) {
+        if (isset($request->title)) {
             if ($request->id == '') {
-                $count = Models::where(['title' => $request->title , 'brand_id' => $request->brand_id])->count();
+                $count = DocumentType::where(['title' => $request->title ])->count();
                 if ($count > 0) {
-                    return response()->json(['status' => false, 'data' => 'Models Already Exist.']);
+                    return response()->json(['status' => false, 'data' => 'Document Type Already Exist.']);
                 } else {
-                    $store = Models::create([
-                        'model' => $request->model,
-                        'brand_id' => $request->brand_id,
+                    $store = DocumentType::create([
+                        'title' => $request->title,
+                        // 'loan_type_id' => $request->loan_type_id,
                     ]);
                 }
-                return response()->json(['status' => true, 'data' => 'Models Created Successfully']);
+                return response()->json(['status' => true, 'data' => 'Document Type Created Successfully']);
             } else {
-                $count = Models::whereNotIn('id', [$request->id])->where(['model' => $request->model , 'brand_id' => $request->brand_id])->count();
+                $count = DocumentType::whereNotIn('id', [$request->id])->where(['title' => $request->title ])->count();
                 if ($count > 0) {
-                    return response()->json(['status' => false, 'data' => 'Models Already Exist.']);
+                    return response()->json(['status' => false, 'data' => 'Document Type Already Exist.']);
                 } else {
-                    $update = Models::where(['id' => $request->id])->update([
-                        'model' => $request->model,
-                        'brand_id' => $request->brand_id,
+                    $update = DocumentType::where(['id' => $request->id])->update([
+                        'title' => $request->title,
+                        // 'loan_type_id' => $request->loan_type_id,
 
                     ]);
                 }
-                return response()->json(['status' => true, 'data' => 'Models Updated Successfully']);
+                return response()->json(['status' => true, 'data' => 'Document Type Updated Successfully']);
             }
         } else {
-            return response()->json(['status' => false, 'data' => 'Models Not Created']);
+            return response()->json(['status' => false, 'data' => 'Document Type Not Created']);
         }
     }
 
     public function edit(Request $request)
     {
         if (isset($request->id)) {
-            $data = Models::where(['id' => $request->id])->select('id', 'model', 'brand_id')->first();
+            $data = DocumentType::where(['id' => $request->id])->select('id', 'title')->first();
             return response()->json(['status' => true, 'data' => $data]);
         } else {
             return response()->json(['status' => false, 'data' => 'Required Details Not Found']);
@@ -207,7 +208,7 @@ class ModelController extends Controller
     {
         if (isset($request->id)) {
             // dd($request->id);
-            $delete = Models::where(['id' => $request->id])->update([
+            $delete = DocumentType::where(['id' => $request->id])->update([
                 'deleted_at' => Carbon::now(),
             ]);
             return response()->json(['status' => 'success', 'data' => 'Models Deleted Successfully']);
@@ -218,7 +219,7 @@ class ModelController extends Controller
 
     public function massDestroy()
     {
-        $academicYears = Models::whereIn('id',request('ids'))->delete() ;
+        $academicYears = DocumentType::whereIn('id',request('ids'))->delete() ;
         return response()->json(['status' => 'success', 'data' => 'Models Deleted Successfully']);
         // find(request('ids'));
 

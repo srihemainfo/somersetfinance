@@ -27,22 +27,19 @@ class LoanType extends Model
 
     public function documents()
     {
-        return $this->hasMany(DocumentType::class);
+        return $this->hasManyThrough(DocumentType::class, DocumentForm::class, 'loan_type_id', 'id', 'id', 'loan_document_id');
     }
 
-    // public function Model()
-    // {
-    //     return $this->hasMany(Models::class, 'brand_id');
-    // }
+    public function formuploads()
+    {
+        return $this->hasManyThrough(FormUpload::class, FormLoan::class, 'loan_type_id', 'id', 'id', 'form_upload_id');
+    }
 
-    // protected function serializeDate(DateTimeInterface $date)
-    // {
-    //     return $date->format('Y-m-d H:i:s');
-    // }
 
-    // public function sellVehicleDetails()
-    // {
-    //     return $this->hasMany(SellVehicleDetails::class, 'brand');
-    // }
+
+    public function formUploadss()
+    {
+        return $this->hasMany(FormUpload::class);
+    }
 
 }

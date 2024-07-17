@@ -615,3 +615,47 @@ div.dt-button-collection {
 .search-input-container {
     overflow: hidden !important;
 }
+
+/* Document Upload */
+
+.document_status_img {
+    width: 45%;
+}
+
+.input {
+    max-width: 190px;
+    display: none;
+}
+
+.labelFile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 250px;
+    height: 190px;
+    border: 2px dashed #ccc;
+    align-items: center;
+    text-align: center;
+    padding: 5px;
+    color: #404040;
+    cursor: pointer;
+}
+
+.modal-fullscreen {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    max-width: 100%;
+}
+
+.modal-fullscreen .modal-content {
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+}
+
+.modal-fullscreen .modal-body {
+    overflow-y: auto;
+}
+

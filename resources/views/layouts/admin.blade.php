@@ -57,7 +57,7 @@
         display: block;
         font-size: 5vw;
         height: 1em;
-        left: 90%;
+        left: 50%;
         position: relative;
         top: 50%;
         transform: translate(-50%, -50%);
@@ -301,7 +301,7 @@
                     <div style="display: flex; gap:10px;">
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item dropdown notifications-menu">
-                                <a href="{{route('admin.application.index')}}" class="new_booking nav-link nav_prof_label" style="background-color: rgb(13, 81, 129); color: rgb(255, 255, 255); display: block;">
+                                <a href="{{route('admin.application.index')}}" class="new_booking nav-link nav_prof_label" style="background-color: #ff9c07; color: rgb(255, 255, 255); display: block;">
                                     <i class="fas fa-plus-circle"></i>
                                      Application Create
                                 </a>
@@ -310,7 +310,7 @@
 
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item dropdown notifications-menu">
-                                <a href="{{route('admin.customerusers.index')}}" class="new_booking nav-link nav_prof_label" style="background-color: rgb(13, 81, 129); color: rgb(255, 255, 255); display: block;">
+                                <a href="{{route('admin.customerusers.index')}}" class="new_booking nav-link nav_prof_label" style="background-color: rgb(180 29 40); color: rgb(255, 255, 255); display: block;">
                                     <i class="fas fa-plus-circle"></i>
                                     Customer Create
                                 </a>
@@ -318,8 +318,33 @@
                         </ul>
                     </div>
                 </li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown notifications-menu mx-2" id="logout_show">
+                    <a href="#" class="nav-link nav_prof_label"
+                        style="background-color:#0d5181;color:rgb(255, 255, 255);display:block;" data-toggle="dropdown">
+
+                        {{-- @if (session('profile') != '' && session('profile') != null)
+                            <img src="{{ asset(session('profile')) }}" alt="" style="border-radius:50%;"
+                                width="25px" height="25px">
+
+                        @else --}}
+                        <i class="fa fa-user"></i>
+                        {{-- @endif --}}
+                        <span style="margin-left:0.75rem;">{{ auth()->user()->name }}</span>
+                    </a>
+                </li>
                 <li class="nav-item dropdown notifications-menu">
-                    <a href="#" class="nav-link" data-toggle="dropdown" style="color:#405189;padding:0 20px 0 0;">
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="logout_div">
+                        <ul style="list-style-type:none;padding:0;">
+                            <li> <a href="#" class="dropdown-item"
+                                    onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
+                                    Logout </a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item dropdown notifications-menu">
+                    <a href="#" class="nav-link" data-toggle="dropdown" style="color:#405189;">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19 19">
                             <g class="too-big-actually">
                                 <g class="bell-whole">
@@ -375,31 +400,6 @@
                                 {{ trans('global.no_alerts') }}
                             </div>
                         @endif
-                    </div>
-                </li>
-            </ul>
-            <ul class="navbar-nav">
-                <li class="nav-item dropdown notifications-menu">
-                    <a href="#" class="nav-link nav_prof_label"
-                        style="background-color:#0d5181;color:rgb(255, 255, 255);display:block;" data-toggle="dropdown">
-
-                        {{-- @if (session('profile') != '' && session('profile') != null)
-                            <img src="{{ asset(session('profile')) }}" alt="" style="border-radius:50%;"
-                                width="25px" height="25px">
-
-                        @else --}}
-                        <i class="fa fa-user"></i>
-                        {{-- @endif --}}
-                        <span style="margin-left:0.75rem;">{{ auth()->user()->name }}</span>
-                    </a>
-                </li>
-                <li class="nav-item dropdown notifications-menu">
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <ul style="list-style-type:none;padding:0;">
-                            <li> <a href="#" class="dropdown-item"
-                                    onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
-                                    Logout </a></li>
-                        </ul>
                     </div>
                 </li>
             </ul>
@@ -702,6 +702,16 @@
         });
     </script>
     <script>
+
+        // New Roggle
+
+        $(document).ready(function(){
+    $('#logout_show').click(function(){
+        $('#logout_div').toggleClass('show');
+    });
+});
+
+
         $(document).ready(function() {
             $('.searchable-field').select2({
                 minimumInputLength: 3,

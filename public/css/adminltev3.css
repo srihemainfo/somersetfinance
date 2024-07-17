@@ -9942,6 +9942,7 @@ html {
     padding-right: 1rem;
     overflow-y: auto;
     height: calc(100% - 4rem);
+    background: #ff4d67;
 }
 
 .user-panel {
@@ -16532,48 +16533,45 @@ button:hover {
 /* Custom scrollbar for WebKit-based browsers (e.g., Chrome, Safari) */
 ::-webkit-scrollbar {
     width: 8px; /* Width of the scrollbar */
-  }
+}
 
-  ::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
     background-color: #888; /* Color of the scrollbar thumb (handle) */
     border-radius: 5px; /* Rounded corners for the thumb */
-  }
+}
 
-  ::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
     background-color: #006cdf; /* Color of the scrollbar thumb on hover */
-  }
+}
 
-  ::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
     background-color: #f1f1f1; /* Color of the scrollbar track */
-  }
+}
 
-  /* Hide vertical scrollbar on Firefox */
-  html {
+/* Hide vertical scrollbar on Firefox */
+html {
     scrollbar-width: thin;
-  }
+}
 
-  /* Custom scrollbar for Firefox */
-  html::-webkit-scrollbar {
+/* Custom scrollbar for Firefox */
+html::-webkit-scrollbar {
     width: 8px; /* Width of the scrollbar */
-  }
+}
 
-  html::-webkit-scrollbar-thumb {
+html::-webkit-scrollbar-thumb {
     background-color: #888; /* Color of the scrollbar thumb (handle) */
     border-radius: 5px; /* Rounded corners for the thumb */
-  }
+}
 
-  html::-webkit-scrollbar-thumb:hover {
+html::-webkit-scrollbar-thumb:hover {
     background-color: #006cdf; /* Color of the scrollbar thumb on hover */
-  }
+}
 
-  html::-webkit-scrollbar-track {
+html::-webkit-scrollbar-track {
     background-color: #f1f1f1; /* Color of the scrollbar track */
-  }
+}
 
-  /* Show horizontal scrollbar */
-  body {
+/* Show horizontal scrollbar */
+body {
     overflow-x: auto;
-  }
-
-  
-
+}

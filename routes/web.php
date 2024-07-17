@@ -71,6 +71,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('get-clients', 'ApplicationController@GetClients')->name('GetClients');
     Route::post('get-client_info', 'ApplicationController@GetClientInfo')->name('GetClientInfo');
     Route::post('get-customer_store', 'ApplicationController@customerStore')->name('customerStore');
+    Route::post('getLoanTypeDetails', 'ApplicationController@getLoanTypeDetails')->name('getLoanTypeDetails');
+    Route::get('document', 'ApplicationController@document_index')->name('document.index');
 
 
     Route::get('seller_enquire', 'SellerEnquireController@index')->name('seller_enquire.index');
@@ -107,6 +109,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('document_type/store', 'DocumenTypeController@store')->name('document_type.store');
     Route::post('document_type/delete', 'DocumenTypeController@destroy')->name('document_type.delete');
     Route::delete('document_type/destroy', 'DocumenTypeController@massDestroy')->name('document_type.massDestroy');
+
+    Route::get('form_upload', 'FormUploadController@index')->name('form_upload.index');
+    Route::post('form_upload/view', 'FormUploadController@view')->name('form_upload.view');
+    Route::post('form_upload/edit', 'FormUploadController@edit')->name('form_upload.edit');
+    Route::post('form_upload/store', 'FormUploadController@store')->name('form_upload.store');
+    Route::post('form_upload/delete', 'FormUploadController@destroy')->name('form_upload.delete');
+    Route::delete('form_upload/destroy', 'FormUploadController@massDestroy')->name('form_upload.massDestroy');
 
 
 
@@ -185,6 +194,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Roles
     Route::delete('roles/destroy', 'RolesController@massDestroy')->name('roles.massDestroy');
     Route::resource('roles', 'RolesController');
+
+    Route::delete('user-alerts/destroy', 'UserAlertsController@massDestroy')->name('user-alerts.massDestroy');
+    Route::get('user-alerts/read', 'UserAlertsController@read');
+    Route::resource('user-alerts', 'UserAlertsController', ['except' => ['edit', 'update']]);
 
     // Users
     Route::delete('users/destroy', 'UsersController@massDestroy')->name('users.massDestroy');

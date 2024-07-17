@@ -14,7 +14,9 @@ use Illuminate\Support\Str;
 use App\Models\{
     LoanType,
     CustomDetail,
-    Brand
+    Brand,
+    FormUpload,
+    DocumentType
 };
 // use App\Http\Controllers\AllDataController;
 use Yajra\DataTables\Facades\DataTables;
@@ -78,8 +80,12 @@ class ApplicationController extends Controller
 
         }
         $isEditable = false;
+        // LoanType::whereNotNull('title')->pluck('title', 'id');
+        $loan_types = LoanType::pluck('title','id')->prepend('Select LoanType', '') ;
+        // $document_types = DocumentType::whereNotNull('title')->pluck('title', 'id')->prepend('Select Document Type', ' ') ;
+        // $formuploades = FormUpload::whereNotNull('title')->pluck('title', 'id')->prepend('Select Form Upload', ' ') ;
 
-        return view('admin.application.index', compact('isEditable'));
+        return view('admin.application.index', compact('isEditable','loan_types',));
 
 
 
@@ -97,32 +103,38 @@ class ApplicationController extends Controller
 
     public function store(Request $request)
     {
-        if (isset($request->brand) ) {
-            if ($request->id == '') {
-                $count = Brand::where(['brand' => $request->brand])->count();
-                if ($count > 0) {
-                    return response()->json(['status' => false, 'data' => 'Brand Already Exist.']);
-                } else {
-                    $store = Brand::create([
-                        'brand' => $request->brand,
-                    ]);
-                }
-                return response()->json(['status' => true, 'data' => 'Brand Created Successfully']);
-            } else {
-                $count = Brand::whereNotIn('id', [$request->id])->where(['brand' => $request->brand])->count();
-                if ($count > 0) {
-                    return response()->json(['status' => false, 'data' => 'Brand Already Exist.']);
-                } else {
-                    $update = Brand::where(['id' => $request->id])->update([
-                        'brand' => $request->brand,
 
-                    ]);
-                }
-                return response()->json(['status' => true, 'data' => 'Brand Updated Successfully']);
-            }
-        } else {
-            return response()->json(['status' => false, 'data' => 'Brand Not Created']);
-        }
+        dd($request);
+
+
+
+
+        // if (isset($request->brand) ) {
+        //     if ($request->id == '') {
+        //         $count = Brand::where(['brand' => $request->brand])->count();
+        //         if ($count > 0) {
+        //             return response()->json(['status' => false, 'data' => 'Brand Already Exist.']);
+        //         } else {
+        //             $store = Brand::create([
+        //                 'brand' => $request->brand,
+        //             ]);
+        //         }
+        //         return response()->json(['status' => true, 'data' => 'Brand Created Successfully']);
+        //     } else {
+        //         $count = Brand::whereNotIn('id', [$request->id])->where(['brand' => $request->brand])->count();
+        //         if ($count > 0) {
+        //             return response()->json(['status' => false, 'data' => 'Brand Already Exist.']);
+        //         } else {
+        //             $update = Brand::where(['id' => $request->id])->update([
+        //                 'brand' => $request->brand,
+
+        //             ]);
+        //         }
+        //         return response()->json(['status' => true, 'data' => 'Brand Updated Successfully']);
+        //     }
+        // } else {
+        //     return response()->json(['status' => false, 'data' => 'Brand Not Created']);
+        // }
     }
 
     public function edit(Request $request)
@@ -171,16 +183,16 @@ class ApplicationController extends Controller
         $search = $request->search;
 
         if ($search == '') {
-            $clients = CustomDetail::orderby('f_name', 'asc')->select('id', 'f_name')->distinct()->limit(6)->get();
+            $clients = CustomDetail::orderby('name', 'asc')->select('id', 'name','email')->distinct()->limit(6)->get();
         } else {
-            $clients = CustomDetail::orderby('f_name', 'asc')->select('id', 'f_name')->where('f_name', 'like', '%' . $search . '%')->distinct()->limit(6)->get();
+            $clients = CustomDetail::orderby('name', 'asc')->select('id', 'name','email')->where('name', 'like', '%' . $search . '%')->distinct()->limit(6)->get();
         }
 
         $response = [];
         foreach ($clients as $client) {
             $response[] = array(
                 "id" => $client->id,
-                "text" => $client->f_name
+                "text" => $client->name .'(' . $client->email . ')',
             );
         }
         return response()->json($response);
@@ -198,15 +210,15 @@ class ApplicationController extends Controller
 
     public function customerStore(Request $request)
     {
-        
+
 
         $validator = Validator::make($request->all(), [
-            "first_name" => ["required"],
+            "name" => ["required"],
             // "cmpny_name" => ["required"],
-            'email' => ["nullable", "email", Rule::unique('customer_details')->ignore($request->customer_id)],
+            'email' => ["required", "email", Rule::unique('customer_details')->ignore($request->customer_id)],
             "phone" => ["required", "numeric", Rule::unique('customer_details')->ignore($request->customer_id)],
             "address1" => ["nullable"],
-            "remarks" => ["nullable"],
+            // "remarks" => ["nullable"],
         ]);
 
         if ($validator->fails()) {
@@ -218,17 +230,61 @@ class ApplicationController extends Controller
             $data = CustomDetail::updateOrCreate(
                 ['id' => $request->customer_id],
                 [
-                    'name' => $request->first_name,
+                    'name' => $request->name,
                     // 'company_name' => $request->cmpny_name,
                     'phone' => $request->phone,
                     'email' => $request->email,
                     'address1' => $request->address1,
-                    'remark' => $request->remarks,
+                    // 'remark' => $request->remarks,
                 ]
             );
 
             return response()->json($data->id ? ['status' => 200, 'data' => $data, 'errors' => NULL] : ['status' => 400, 'data' => NULL, 'errors' => NULL]);
         }
+    }
+
+    public function getLoanTypeDetails(Request $request){
+
+        $id = $request->loan_type_id;
+
+        $loanType = LoanType::find($id);
+        if ($loanType) {
+            $documentTypes = $loanType->documents;
+            $document_id =  $loanType->documents->pluck('id') ??  [];
+
+            $document_content = '';
+            foreach ($documentTypes as $documentType) {
+                $document_content .= '<div class="form-group col-md-3">';
+                $document_content .= '<input type="checkbox" name="document_features[]" value="' . $documentType->id . '">';
+                $document_content .= '&nbsp;&nbsp;' . $documentType->title . '<br>';
+                $document_content .= '</div>';
+            }
+
+            $formUploads = $loanType->formuploads;
+            $formuploads_id =  $loanType->formuploads->pluck('id') ??  [];
+            $formUpload_content = '';
+
+            foreach ($formUploads as $formUpload) {
+                $formUpload_content .= '<div class="form-group col-md-3">';
+                $formUpload_content .= '<input type="checkbox" name="document_features[]" value="' . $formUpload->id . '">';
+                $formUpload_content .= '&nbsp;&nbsp;' . $formUpload->title . '<br>';
+                $formUpload_content .= '</div>';
+            }
+
+           $document_typs = DocumentType::whereNotIN('id',$document_id)->pluck('title','id');
+           $form_uploads_typs= FormUpload::whereNotIN('id',$formuploads_id)->pluck('title','id');
+            return response()->json(['status' => true, 'document_content' => $document_content, 'formUpload_content'=> $formUpload_content, 'document_typs'=>  $document_typs, 'form_uploads_typs'=>$form_uploads_typs]);
+        } else {
+            return response()->json(['status' => false, 'document_content' => [], 'formUpload_content'=> [],'document_typs'=>  '', 'form_uploads_typs'=> '']);
+        }
+
+
+
+
+    }
+
+    public function document_index(){
+        return view('admin.application.document_index') ;
     }
 
 

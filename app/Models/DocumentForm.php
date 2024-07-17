@@ -10,12 +10,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-class DocumentType extends Model
+class DocumentForm extends Model
 {
     use SoftDeletes, HasFactory;
 
 
-    protected $table = 'loan_documents';
+    protected $table = 'document_types';
     protected $dates = [
         'created_at',
         'updated_at',
@@ -23,21 +23,17 @@ class DocumentType extends Model
     ];
 
 
-    protected $fillable = ['title','created_at','updated_at','deleted_at'];
+    protected $fillable = ['loan_document_id','loan_type_id','updated_at','deleted_at','created_at'];
 
     public function loanType()
     {
         return $this->belongsTo(LoanType::class, 'loan_type_id');
     }
 
-    public function documentForms()
+    public function documentType()
     {
-        return $this->hasMany(DocumentForm::class, 'loan_document_id');
+        return $this->belongsTo(DocumentType::class, 'loan_document_id');
     }
-
-
-
-
 
 }
 

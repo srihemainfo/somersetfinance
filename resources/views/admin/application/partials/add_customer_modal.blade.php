@@ -12,7 +12,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="form-group">
-                            <label for="name" class="col-form-label">Full Name<span class="required">&nbsp;*</span></label>
+                            <label for="name" class="col-form-label">Full Name<span class="required">&nbsp;</span></label>
                             <input type="text" class="form-control" name="name" id="name" placeholder="Enter Name">
                             <p class="text-danger invalid-name"></p>
                         </div>
@@ -22,7 +22,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="form-group">
-                            <label for="email" class="col-form-label">Email</label>
+                            <label for="email" class="col-form-label">Email <span class="required">&nbsp;</span></label>
                             <input type="text" class="form-control" name="email" id="email" placeholder="Enter Email">
                             <p class="text-danger invalid-email"></p>
                         </div>
@@ -31,7 +31,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="form-group">
-                            <label for="phone" class="col-form-label">Phone No.<span class="required">&nbsp;*</span></label>
+                            <label for="phone" class="col-form-label">Phone No.<span class="required">&nbsp;</span></label>
                             <input type="text" class="form-control" name="phone" id="phone" placeholder="Enter Phone No.">
                             <p class="text-danger invalid-phone-no"></p>
                         </div>
@@ -47,17 +47,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <label for="remarks" class="col-form-label">Remarks</label>
-                            <textarea class="form-control" name="remarks" id="remarks"></textarea>
-                            <p class="text-danger"></p>
-                        </div>
-                    </div>
-                </div>
-
-
                 <div class="row">
 
                 </div>
