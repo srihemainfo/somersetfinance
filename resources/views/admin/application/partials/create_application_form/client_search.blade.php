@@ -391,9 +391,13 @@
 
 
 
-            <button class="btn btn-success" id="book_now">Submit Now</button>
+
         </div>
     </div>
+
+    <button class="btn btn-success" id="book_now">Submit Now</button>
+
+
 
 </div>
 
