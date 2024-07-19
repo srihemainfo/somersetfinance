@@ -16575,3 +16575,21 @@ html::-webkit-scrollbar-track {
 body {
     overflow-x: auto;
 }
+
+.modal.fade .modal-dialog {
+    transform: translate(50%, 0) !important;
+}
+
+.modal.show .modal-dialog {
+    transform: translate(0, 0) !important;
+}
+
+.border_right {
+    border-right: 1px solid #dee2e6;
+    width: 50%;
+}
+
+label.col-form-label-heading {
+    font-weight: 400 !important;
+    font-size: larger;
+}

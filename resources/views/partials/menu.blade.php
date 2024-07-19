@@ -248,7 +248,7 @@
                 @endcan
 
                 <li class="nav-item">
-                    <a href="{{ route('admin.document.index') }}"
+                    <a href="{{ route('admin.document.index','none') }}"
                         class="nav-link {{ request()->is('admin/document') || request()->is('admin/document*') ? 'active' : '' }}">
                         <i class="fas nav-icon fa-pencil-alt">
                         </i>

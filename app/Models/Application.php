@@ -143,6 +143,11 @@ class Application extends Model
         return $this->belongsToMany(CoApplicant::class, 'application_detail_co_applicant', 'application_detail_id', 'co_applicant_id')->withTimestamps();
     }
 
+    public function images()
+    {
+        return $this->hasMany(ApplicationImage::class);
+    }
+
 
 
 }

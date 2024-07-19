@@ -72,7 +72,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('get-client_info', 'ApplicationController@GetClientInfo')->name('GetClientInfo');
     Route::post('get-customer_store', 'ApplicationController@customerStore')->name('customerStore');
     Route::post('getLoanTypeDetails', 'ApplicationController@getLoanTypeDetails')->name('getLoanTypeDetails');
-    Route::get('document', 'ApplicationController@document_index')->name('document.index');
+    Route::get('document/{id}', 'ApplicationController@document_index')->name('document.index');
+    Route::post('document/upload_image_get', 'ApplicationController@uploadImageGet')->name('document.upload_image_get');
+    Route::post('document/upload_image_get_delete', 'ApplicationController@uploadImageDelete')->name('document.upload_image_get_delete');
+    Route::post('document/upload_image_get_deletes', 'ApplicationController@uploadImageDeletes')->name('document.upload_image_get_deletes');
+    Route::post('document/remarkUpdated', 'ApplicationController@remarkUpdated')->name('document.remarkUpdated');
+    Route::post('document/remarkUpdatedadmin', 'ApplicationController@remarkUpdatedadmin')->name('document.remarkUpdatedadmin');
 
 
     Route::get('seller_enquire', 'SellerEnquireController@index')->name('seller_enquire.index');
@@ -129,13 +134,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     Route::get('case-list', 'ApplicationStageController@index')->name('application-stage.index');
     Route::post('case-list/view', 'ApplicationStageController@view')->name('application-stage.view');
+    Route::post('case-list/uploadcheck', 'ApplicationStageController@uploadcheck')->name('application-stage.uploadcheck');
     Route::get('case-list/edit/{id}', 'ApplicationStageController@edit')->name('application-stage.edit');
     // Route::post('application-stage/edit', 'ApplicationStageController@edit')->name('application-stage.edit');
     Route::post('case-list/store', 'ApplicationStageController@store')->name('application-stage.store');
     Route::post('case-list/delete', 'ApplicationStageController@destroy')->name('application-stage.delete');
     Route::delete('case-list/destroy', 'ApplicationStageController@massDestroy')->name('application-stage.massDestroy');
-
-
+    
+    
 
 
 

@@ -76,9 +76,11 @@ class ApplicationStageController extends Controller
             $table->editColumn('actions', function ($row) {
                 $viewFunct = 'viewCase';
                 $editFunct = 'editCase';
+                $uploadFunct = 'uploaddocument';
                 $deleteFunct = 'deleteCase';
                 $viewGate = 'case_show'; // need to change gate permission
                 $editGate = 'case_edit';
+                $uploadGate = 'case_edit';
                 $deleteGate = 'case_delete';
                 // $crudRoutePart = 'subjects';
 
@@ -87,9 +89,11 @@ class ApplicationStageController extends Controller
                     'viewGate',
                 'editGate',
                 'deleteGate',
+                'uploadFunct',
                 // 'crudRoutePart',
                 'viewFunct',
                 'editFunct',
+                'uploadGate',
                 'deleteFunct',
                 'row'
                 ));
@@ -124,24 +128,77 @@ class ApplicationStageController extends Controller
                 $coApplicants = $data->co_applicant1 ;
 
                 foreach($coApplicants as $coappicant){
-                    // dd($coApplicants);
+                    dd($coApplicants);
                 }
 
 
             }
 
+          }
+
+          $url = route('admin.document.index',  $id) ;
+          dd($url);
+
+            // $data = Brand::where(['id' => $request->id])->select('id', 'brand')->first();
+            return response()->json(['status' => true, 'data' => true,'url'=> $url,]);
+        } else {
+            return response()->json(['status' => false, 'data' => 'Required Details Not Found']);
+        }
+    }
 
 
+    public function uploadcheck(Request $request)
+    {
+        if (isset($request->id)) {
+            $id = $request->id;
+            $data =  Application::find($id) ;
+            $condtion_status = false;
+            $url = '';
+            if($data){
+
+                if(isset($data->applicantDocument1) || isset($data->applicationLoanDocument2) || isset($data->applicantformUpload2) || isset($data->applicationLoanFormUpload2) || isset($data->additionalDocument2)  ){
+                    $condtion_status = true;
+
+                }
+
+                // if(isset($data->applicationLoanDocument2)){
+                //     $condtion_status = true;
+                // }
+
+                // if(isset($data->additionalDocument2)){
+                //     $condtion_status = true;
+                // }
+
+                // if(isset($data->applicantformUpload2)){
+                //     $condtion_status = true;
+                // }
+                // if(isset($data->applicationLoanFormUpload2)){
+                //     $condtion_status = true;
+                // }
 
 
+                // $customer_name =  $data->customerdetail->name  ?? '' ;
+                // $customer_email = $data->customerdetail->email ?? '' ;
+                // $customer_phone = $data->customerdetail->phone ?? '' ;
+                // $customer_address = $data->customerdetail->address ?? '' ;
 
+                // if($data->co_applicant1){
 
+                //     $coApplicants = $data->co_applicant1 ;
 
+                //     foreach($coApplicants as $coappicant){
+                //         // dd($coApplicants);
+                //     }
+
+                // }
+
+                $url = route('admin.document.index',  $id) ;
+                // dd($url);
           }
 
 
             // $data = Brand::where(['id' => $request->id])->select('id', 'brand')->first();
-            return response()->json(['status' => true, 'data' => true]);
+            return response()->json(['status' => true, 'data' => true,'url'=> $url,]);
         } else {
             return response()->json(['status' => false, 'data' => 'Required Details Not Found']);
         }

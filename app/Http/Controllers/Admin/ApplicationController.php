@@ -20,18 +20,20 @@ use App\Models\{
     Application,
     CoApplicant,
     ApplicationCoapplicant,
-    ApplicationDocument,ApplicationLoanDocument,
+    ApplicationDocument,
+    ApplicationLoanDocument,
     ApplicationFormUpload,
     ApplicationLoanFormUpload,
     AdditionalDocument,
-    ApplicationAdditional
-
-
+    ApplicationAdditional,
+    ApplicationImage
 };
 // use App\Http\Controllers\AllDataController;
 use Yajra\DataTables\Facades\DataTables;
 use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 
 
@@ -48,8 +50,6 @@ class ApplicationController extends Controller
 
     public function index(Request $request)
     {
-
-
 
 
         if ($request->ajax()) {
@@ -74,31 +74,27 @@ class ApplicationController extends Controller
                 return view('partials.ajaxTableActions', compact(
 
                     'viewGate',
-                'editGate',
-                'deleteGate',
-                'crudRoutePart',
-                'viewFunct',
-                'editFunct',
-                'deleteFunct',
-                'row'
+                    'editGate',
+                    'deleteGate',
+                    'crudRoutePart',
+                    'viewFunct',
+                    'editFunct',
+                    'deleteFunct',
+                    'row'
                 ));
             });
 
 
             $table->rawColumns(['actions', 'placeholder']);
             return $table->make(true);
-
         }
         $isEditable = false;
         // LoanType::whereNotNull('title')->pluck('title', 'id');
-        $loan_types = LoanType::pluck('title','id')->prepend('Select LoanType', '') ;
+        $loan_types = LoanType::pluck('title', 'id')->prepend('Select LoanType', '');
         // $document_types = DocumentType::whereNotNull('title')->pluck('title', 'id')->prepend('Select Document Type', ' ') ;
         // $formuploades = FormUpload::whereNotNull('title')->pluck('title', 'id')->prepend('Select Form Upload', ' ') ;
 
-        return view('admin.application.index', compact('isEditable','loan_types',));
-
-
-
+        return view('admin.application.index', compact('isEditable', 'loan_types',));
     }
 
     public function view(Request $request)
@@ -115,7 +111,7 @@ class ApplicationController extends Controller
     {
 
 
-        $customer_id = $request->client_id ;
+        $customer_id = $request->client_id;
         // $customer_id = $request->client_id ;
         $co_applicants = $request->co_applicants_name;
         $co_applicants_emails = $request->co_applicants_email;
@@ -124,7 +120,7 @@ class ApplicationController extends Controller
         $loan_type_id = $request->loan_type_id;
 
         $document_features = $request->document_features;
-        $document_type_ids = $request ->document_id;
+        $document_type_ids = $request->document_id;
 
         $form_upload_ids = $request->form_upload_id;
         $uploadForm_features = $request->uploadForm_features;
@@ -134,12 +130,12 @@ class ApplicationController extends Controller
         // Application::where(['customer_id'=> $customer_id]) ;
 
         $applicant =  Application::create([
-            'customer_id'=> $customer_id,
+            'customer_id' => $customer_id,
             'loan_type_id' => $loan_type_id
-        ]) ;
+        ]);
         // dd($applicant);
 
-        if($applicant){
+        if ($applicant) {
 
             $id = $applicant->id;
 
@@ -154,7 +150,7 @@ class ApplicationController extends Controller
             //         ApplicationCoapplicant::create(['application_detail_id' => $id, 'co_applicant_id'=> $check_co_applicant->id]);
             //     }
             // }
-            for($si=0; $si < count($co_applicants); $si++ ){
+            for ($si = 0; $si < count($co_applicants); $si++) {
                 $check_co_applicant = CoApplicant::firstOrCreate(
                     [
                         'name' => $co_applicants[$si],
@@ -174,7 +170,7 @@ class ApplicationController extends Controller
 
 
             // with loan_type_id
-            if(isset($document_features) && count($document_features ) > 0){
+            if (isset($document_features) && count($document_features) > 0) {
 
                 $applicant->applicationLoanDocument2()->detach($document_features);
 
@@ -192,7 +188,7 @@ class ApplicationController extends Controller
             }
 
             // without loan_type_id
-            if(isset($document_type_ids) && count($document_type_ids ) > 0){
+            if (isset($document_type_ids) && count($document_type_ids) > 0) {
 
                 $applicant->applicantDocument1()->detach($document_type_ids);
                 $applicant->applicantDocument1()->attach($document_type_ids);
@@ -212,7 +208,7 @@ class ApplicationController extends Controller
             }
 
 
-            if(isset($uploadForm_features) && count($uploadForm_features ) > 0){
+            if (isset($uploadForm_features) && count($uploadForm_features) > 0) {
 
                 $applicant->applicationLoanFormUpload2()->detach($uploadForm_features);
                 $applicant->applicationLoanFormUpload2()->attach($uploadForm_features);
@@ -228,7 +224,7 @@ class ApplicationController extends Controller
             }
 
             // without loan_type_id
-            if(isset($form_upload_ids) && count($form_upload_ids ) > 0){
+            if (isset($form_upload_ids) && count($form_upload_ids) > 0) {
 
 
                 $applicant->applicantformUpload2()->detach($form_upload_ids);
@@ -297,13 +293,13 @@ class ApplicationController extends Controller
 
 
             $id = $applicant->id;
-            $application_id = 'APP' . sprintf('%05d', $id) ;
-            $applicant->ref_no = $application_id ;
-            $applicant-> save();
+            $application_id = 'APP' . sprintf('%05d', $id);
+            $applicant->ref_no = $application_id;
+            $applicant->save();
 
-            $message = "Case Create Successful and application id is ". $application_id ;
+            $message = "Case Create Successful and application id is " . $application_id;
 
-            return response()->json(['status' => true, 'data' => $message ]);
+            return response()->json(['status' => true, 'data' => $message]);
 
             // dd('test');
 
@@ -369,7 +365,7 @@ class ApplicationController extends Controller
 
     public function massDestroy()
     {
-        $academicYears = Brand::whereIn('id',request('ids'))->delete() ;
+        $academicYears = Brand::whereIn('id', request('ids'))->delete();
         // find(request('ids'));
 
         // foreach ($academicYears as $academicYear) {
@@ -379,10 +375,10 @@ class ApplicationController extends Controller
     }
 
 
-    public function create(){
+    public function create()
+    {
 
-        LoanType::whereNotNull('title')->pluck('title','id');
-
+        LoanType::whereNotNull('title')->pluck('title', 'id');
     }
 
     public function GetClients(Request $request)
@@ -390,16 +386,16 @@ class ApplicationController extends Controller
         $search = $request->search;
 
         if ($search == '') {
-            $clients = CustomDetail::orderby('name', 'asc')->select('id', 'name','email')->distinct()->limit(6)->get();
+            $clients = CustomDetail::orderby('name', 'asc')->select('id', 'name', 'email')->distinct()->limit(6)->get();
         } else {
-            $clients = CustomDetail::orderby('name', 'asc')->select('id', 'name','email')->where('name', 'like', '%' . $search . '%')->distinct()->limit(6)->get();
+            $clients = CustomDetail::orderby('name', 'asc')->select('id', 'name', 'email')->where('name', 'like', '%' . $search . '%')->distinct()->limit(6)->get();
         }
 
         $response = [];
         foreach ($clients as $client) {
             $response[] = array(
                 "id" => $client->id,
-                "text" => $client->name .'(' . $client->email . ')',
+                "text" => $client->name . '(' . $client->email . ')',
             );
         }
         return response()->json($response);
@@ -407,8 +403,7 @@ class ApplicationController extends Controller
 
     public function GetClientInfo(Request $request)
     {
-        $client_details = CustomDetail::
-            select('*')
+        $client_details = CustomDetail::select('*')
             ->where('id', '=', $request->id)
             ->get();
         return response()->json($client_details);
@@ -450,7 +445,8 @@ class ApplicationController extends Controller
         }
     }
 
-    public function getLoanTypeDetails(Request $request){
+    public function getLoanTypeDetails(Request $request)
+    {
 
         $id = $request->loan_type_id;
 
@@ -478,23 +474,224 @@ class ApplicationController extends Controller
                 $formUpload_content .= '</div>';
             }
 
-           $document_typs = DocumentType::whereNotIN('id',$document_id)->pluck('title','id');
-           $form_uploads_typs= FormUpload::whereNotIN('id',$formuploads_id)->pluck('title','id');
-            return response()->json(['status' => true, 'document_content' => $document_content, 'formUpload_content'=> $formUpload_content, 'document_typs'=>  $document_typs, 'form_uploads_typs'=>$form_uploads_typs]);
+            $document_typs = DocumentType::whereNotIN('id', $document_id)->pluck('title', 'id');
+            $form_uploads_typs = FormUpload::whereNotIN('id', $formuploads_id)->pluck('title', 'id');
+            return response()->json(['status' => true, 'document_content' => $document_content, 'formUpload_content' => $formUpload_content, 'document_typs' =>  $document_typs, 'form_uploads_typs' => $form_uploads_typs]);
         } else {
-            return response()->json(['status' => false, 'document_content' => [], 'formUpload_content'=> [],'document_typs'=>  '', 'form_uploads_typs'=> '']);
+            return response()->json(['status' => false, 'document_content' => [], 'formUpload_content' => [], 'document_typs' =>  '', 'form_uploads_typs' => '']);
+        }
+    }
+
+    public function document_index($id)
+    {
+
+        $id = intval($id);
+        $data = Application::find($id);
+        $isdocument = false;
+        if (!$data || $data == null) {
+            return view('admin.application.document_index', compact('isdocument'));
+        }
+
+        $documentImages = ApplicationImage::whereIn('document_id', $data->applicationLoanDocument2->pluck('id'))->get();
+
+        $isdocument = true;
+        return view('admin.application.document_index', compact('data', 'isdocument', 'documentImages'));
+    }
+
+
+    public function uploadImageGet(Request $request)
+    {
+
+
+        if (isset($request->file) && isset($request->applicationId) && isset($request->documentId) && isset($request->imageId)) {
+            $status = false;
+            $message = '';
+            $applicationImage = '';
+
+            if ($request->hasFile('file')) {
+                $applicationImage = ApplicationImage::where([
+                    'application_id' => $request->applicationId,
+                    'document_id' => $request->documentId,
+                    'id' => $request->imageId
+                ])->first();
+
+                if ($applicationImage) {
+                    $oldFilePath = $applicationImage->file_path;
+                    $image = $request->file('file');
+                    $imageName = pathinfo($oldFilePath, PATHINFO_FILENAME) . '.' . $image->getClientOriginalExtension();
+                    $destinationPath = public_path('/formupload');
+                    $newFilePath = $imageName;
+
+                    if ($image->move($destinationPath, $imageName)) {
+                        // Update the file path in the database
+                        $applicationImage->file_path = $newFilePath;
+                        $applicationImage->save();
+
+                        $message = 'Successful image updated';
+                        $status = true;
+                    } else {
+                        $message = 'Failed to move the uploaded file';
+                    }
+                } else {
+                    return response()->json(['status' => false, 'message' => 'Image path not found']);
+                }
+
+                return response()->json(['status' => $status, 'message' => $message, 'data' => $applicationImage]);
+            }
+        }
+
+
+        if (isset($request->applicationId) &&  isset($request->documentId) &&  isset($request->file)) {
+            if ($request->hasFile('file')) {
+                $image = $request->file('file');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $destinationPath = public_path('/formupload');
+                $image->move($destinationPath, $imageName);
+
+                $ApplicationImage =  ApplicationImage::create(
+                    ['application_id' => $request->applicationId, 'document_id' => $request->documentId, 'file_path' => $imageName, 'status' => 'Upload']
+                ); 
+              $data =  ApplicationImage::find($ApplicationImage->id) ?? '' ;
+
+                // Save image path in the database if needed
+                // Example: Image::create(['path' => $imageName]);
+
+                return response()->json(['status' => true, 'data' => $data ]);
+            }
         }
 
 
 
+        $data  = ApplicationImage::where(['application_id' => $request->applicationId, 'document_id' => $request->documentId])->get();
 
+        // dd($data );
+
+        return response()->json(['status' => true, 'data' => $data]);
+
+        dd($request->all());
     }
 
-    public function document_index(){
-        return view('admin.application.document_index') ;
+    public function uploadImageDelete(Request $request)
+    {
+
+        // $data  = ApplicationImage::where(['application_id'=> $request->applicationId,'document_id' => $request->documentId , 'id' =>$request->image_id ])->delete();
+        $image = ApplicationImage::findOrFail($request->image_id);
+
+        // Determine the path to the image file
+        $imagePath = public_path('formupload/' . $image->path); // Adjust the path based on your structure
+
+        // Delete the image file from the public directory
+        if (File::exists($imagePath)) {
+            File::delete($imagePath);
+        }
+
+        // Delete the image record from the database
+        $image->delete();
+
+        // Delete the image record from the database
+        // $image->delete();
+        return response()->json(['status' => true, 'data' => 'true']);
     }
 
+    public function uploadImageDeletes(Request $request)
+    {
+
+        // Fetch image records based on provided IDs
+        $imageIds = $request->input('image_ids', []);
+
+        // Ensure image IDs are provided
+        if (empty($imageIds)) {
+            return response()->json(['status' => false, 'message' => 'No image IDs provided.']);
+        }
+
+        // Retrieve the images from the database
+        $images = ApplicationImage::whereIn('id', $imageIds)->get();
+
+        // Iterate through each image record
+        foreach ($images as $image) {
+            // Determine the path to the image file
+            $imagePath = public_path('formupload/' . $image->path);
+
+            // Delete the image file from the public directory if it exists
+            if (File::exists($imagePath)) {
+                File::delete($imagePath);
+            }
+
+            // Delete the image record from the database
+            $image->delete();
+        }
+
+        return response()->json(['status' => true, 'message' => 'Images deleted successfully.']);
+    }
+
+    public function remarkUpdated(Request $request)
+    {
+
+        
+        
+        $applicationId = $request->input('applicationId');
+        $documentId = $request->input('documentId');
+        $inputNames = json_decode($request->input('inputNames'), true);
+        
+        if(!$applicationId || !$documentId || !$inputNames  ){
+            return response()->json(['status' => true, 'message' => 'Data Not found.', 'data'=>false]);
+        }
+            // Initialize an array to hold parsed data
+            $parsedData = [];
+
+            // Iterate through each serialized string and parse it
+            foreach ($inputNames as $serializedString) {
+                parse_str($serializedString, $parsedArray);
+                $parsedData[] = $parsedArray;
+            }
+
+            // Process each parsed form data
+            foreach ($parsedData as $formData) {
+
+                // Example: Save each form data to the database
+                $model =  ApplicationImage::where([
+                    'application_id' => $applicationId,
+                    'document_id' => $documentId,
+                    'id' => $formData['imageData']
+                ])->update([
+                    'remark' =>  $formData['input_remark']
+                ]); 
+            }
+
+        return response()->json(['status' => true, 'message' => 'successfully updated stauts.', 'data'=> true]);
 
 
+        $inputNames = $request->input('inputNames', []); // Get the inputNames array from the request
 
+        
+    }
+    public function remarkUpdatedadmin(Request $request)
+    {
+
+        $applicationId = $request->input('applicationId');
+        $documentId = $request->input('documentId');
+        $imageId = $request->input('imageId');
+        $radio =$request->input('radio');
+        $admin_remark =$request->input('admin_remark');
+        
+        if(!$applicationId || !$documentId || !$imageId ){
+            return response()->json(['status' => true, 'message' => 'Data Not found.', 'data'=>false]);
+        }
+
+         // Example: Save each form data to the database
+         $model =  ApplicationImage::where([
+            'application_id' => $applicationId,
+            'document_id' => $documentId,
+            'id' => $imageId
+        ])->update([
+            'admin_remark' =>  $admin_remark
+        ]); 
+          
+        return response()->json(['status' => true, 'message' => 'successfully updated stauts.', 'data'=> true]);
+
+
+        $inputNames = $request->input('inputNames', []); // Get the inputNames array from the request
+
+        
+    }
 }

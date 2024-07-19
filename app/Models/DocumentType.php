@@ -35,6 +35,11 @@ class DocumentType extends Model
         return $this->hasMany(DocumentForm::class, 'loan_document_id');
     }
 
+    public function images()
+    {
+        return $this->hasMany(ApplicationImage::class);
+    }
+
 
 
 

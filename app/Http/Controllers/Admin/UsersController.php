@@ -314,7 +314,8 @@ class UsersController extends Controller
         abort_if(Gate::denies('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $roles = Role::pluck('title', 'id');
         $user->load('roles');
-        $role_type = TeachingType::pluck('name', 'id')->prepend('Select Type', '');
+        $role_type = TeachingType::pluck('name', 'id');
+        // dd( $role_type);
         return view('admin.users.edit', compact('role_type', 'user', 'roles'));
     }
 

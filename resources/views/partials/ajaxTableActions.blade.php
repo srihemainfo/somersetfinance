@@ -68,12 +68,17 @@
 
 @if(isset($previewGate))
 @can($previewGate)
-
-
-
 <a href="{{ $weburl  }}" target='_blank' title="Preview"><i class="fa-fw nav-icon fas fa-globe-europe"></i></a>
-
 @endcan
+@endif
 
 
+@if (isset($uploadGate))
+    @can($uploadGate)
+
+        <button class="newViewBtn" onclick="{{ $uploadFunct }}({{ $row->id }})" title="Upload">
+            <i class="fa-fw nav-icon fas fa-solid fa-upload"></i>
+        </button>
+
+    @endcan
 @endif

@@ -3,7 +3,7 @@
 <div class="table-responsive">
 
 
-<table class="table table-hover table-light">
+{{-- <table class="table table-hover table-light">
   <thead>
     <tr>
       <th scope="col">#</th>
@@ -53,7 +53,7 @@
       </td>
     </tr>
   </tbody>
-</table>
+</table> --}}
 
 </div>
 
@@ -65,7 +65,7 @@
             width: 100% !important;
         }
     </style>
-    @can('document_type_access')
+    {{-- @can('document_type_access')
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
             <button class="btn btn-outline-success" onclick="openModal()">
@@ -74,7 +74,7 @@
 
         </div>
     </div>
-    @endcan
+    @endcan --}}
 
     <div class="card">
         <div class="card-header">
@@ -375,6 +375,79 @@
                     }
                 })
             }
+        }
+
+        function uploaddocument(id){
+
+            if (id == undefined) {
+                Swal.fire('', 'ID Not Found', 'warning');
+            } else {
+
+                $('.secondLoader').show()
+                $.ajax({
+                    url: "{{ route('admin.application-stage.uploadcheck') }}",
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        'id': id
+                    },
+                    success: function(response) {
+
+                        $('.secondLoader').hide()
+                        let status = response.status;
+                        if (status == true) {
+
+                            $url = response.url;
+
+                            if($url != ''){
+                                window.location.href = $url ;
+
+                            }else{
+
+                                Swal.fire('', 'No any upload option', 'error');
+                            }
+
+
+
+
+                             // ClientModal_ResetErrors()
+                                // $('#customer_id').val('');
+                                // $('.submit_button').hide();
+                                // $('#saveBtn').html("<i class=\"fa fa-save\"></i>&nbsp; Save");
+                                // $('#customerForm').trigger("reset");
+                                // $('#form-modal').modal('show');
+
+
+                            // var data = response.data;
+                            // $("#document_type_id").val(data.id);
+                            // // $("#loan_type_id").val(data.loan_type_id).prop('disabled', true).select2();
+                            // $("#title").val(data.title);
+                            // $("#loading_div").hide();
+                            // $("#documenttypeModal").modal('show');
+                        } else {
+                            Swal.fire('', response.data, 'error');
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        if (jqXHR.status) {
+                            if (jqXHR.status == 500) {
+                                Swal.fire('', 'Request Timeout / Internal Server Error', 'error');
+                            } else {
+                                Swal.fire('', jqXHR.status, 'error');
+                            }
+                        } else if (textStatus) {
+                            Swal.fire('', textStatus, 'error');
+                        } else {
+                            Swal.fire('', 'Request Failed With Status: ' + jqXHR.statusText,
+                                "error");
+                        }
+                    }
+                })
+
+            }
+
         }
 
         function viewCase(id) {
