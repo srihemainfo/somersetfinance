@@ -44,6 +44,10 @@ class User extends Authenticatable
         'created_at',
         'updated_at',
         'deleted_at',
+        'company_address_1',
+        'company_address_2',
+        'company_phone',
+        'file_path'
     ];
 
     protected function serializeDate(DateTimeInterface $date)
@@ -92,5 +96,17 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class);
     }
+    
+     public function applications()
+    {
+        return $this->hasMany(Application::class, 'assigned_client_id');
+    }
+    
+      public function agreements()
+    {
+        return $this->hasMany(Agreement::class);
+    }
+    
+    
 
 }

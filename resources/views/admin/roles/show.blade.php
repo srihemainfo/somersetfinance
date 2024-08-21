@@ -23,14 +23,7 @@
                             {{ $role->id }}
                         </td>
                     </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.role.fields.type') }}
-                        </th>
-                        <td>
-                            {{ $role->type->name ?? '' }}
-                        </td>
-                    </tr>
+                    
                     <tr>
                         <th>
                             {{ trans('cruds.role.fields.title') }}

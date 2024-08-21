@@ -1,3 +1,17 @@
+@php
+    $userId = auth()->user()->id;
+    $user = \App\Models\User::find($userId);
+    if ($user) {
+        $assignedRole = $user->roles->first();
+
+        if ($assignedRole) {
+            $roleTitle = $assignedRole->id;
+        } else {
+            $roleTitle = 0;
+        }
+    }
+   
+@endphp
 <!DOCTYPE html>
 <html>
 
@@ -10,10 +24,9 @@
     <title>SOMERSET FINANCIAL</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('adminlogo/favicon.png') }}">
     {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" integrity="sha512-UJfAaOlIRtdR+0P6C3KUoTDAxVTuy3lnSXLyLKlHYJlcSU8Juge/mjeaxDNMlw9LgeIotgz5FP8eUQPhX1q10A==" crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" rel="stylesheet" />
     <link
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"
-        rel="stylesheet" />
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"
+    rel="stylesheet" />
     <link href="{{ asset('css/adminltev3.css') }}" rel="stylesheet" />
     <link href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet" />
@@ -24,15 +37,18 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" rel="stylesheet" />
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
-   {{-- <script src="https://code.jquery.com/jquery-3.7.1.js" ></script> --}}
+    {{-- <script src="https://code.jquery.com/jquery-3.7.1.js" ></script> --}}
 
-      <script src="{{ mix('js/app.js') }}"></script>
+    <script src="{{ mix('js/app.js') }}"></script>
     <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+    <script src="{{ asset('js/smooth-scroll.js') }}"></script>
 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
     {{-- <link href="{{ asset('css/materialize.css') }}" rel="stylesheet" /> --}}
 
@@ -57,7 +73,7 @@
         display: block;
         font-size: 5vw;
         height: 1em;
-        left: 90%;
+        left: 50%;
         position: relative;
         top: 50%;
         transform: translate(-50%, -50%);
@@ -265,9 +281,68 @@
             transform: rotate(360deg);
         }
     }
+
+
+    /*Loading CSS*/
+
+    .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+        }
+
+
+        .loader {
+            position: fixed;
+            z-index: 99999;
+            height: 1em;
+            width: 2em;
+            overflow: show;
+            margin: auto;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            font-weight: bold;
+            font-family: monospace;
+            font-size: 30px;
+            line-height: 1.2em;
+            display: inline-grid;
+            pointer-events: none
+        }
+
+        .loader:before,
+        .loader:after {
+            content: "Loading...";
+            grid-area: 1/1;
+            -webkit-mask: linear-gradient(90deg, #000 50%, #0000 0) 0 50%/2ch 100%;
+            color: #0000;
+            text-shadow: 0 0 0 #000, 0 calc(var(--s, 1)*1.2em) 0 #000;
+            animation: l15 1s infinite;
+        }
+
+        .loader:after {
+            -webkit-mask-position: 1ch 50%;
+            --s: -1;
+        }
+
+        @keyframes l15 {
+
+            80%,
+            100% {
+                text-shadow: 0 calc(var(--s, 1)*-1.2em) 0 #000, 0 0 0 #000
+            }
+        }
 </style>
 
-<body class="sidebar-mini layout-fixed" style="height: auto;">
+<body class="sidebar-mini layout-fixed sidebar-collapse" style="height: auto;">
+    <div class="loading-overlay" style='display:none;' >
+        <div class="loader"></div>
+    </div>
     <div class="wrapper">
         <nav class="main-header navbar navbar-expand bg-white navbar-light border-bottom">
             <!-- Left navbar links -->
@@ -297,111 +372,290 @@
             @endif
 
             <ul class="navbar-nav ml-auto">
-                <li>
+                <li class="nav-item">
                     <div style="display: flex; gap:10px;">
+                        @can('case_create_access')
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item dropdown notifications-menu">
-                                <a href="{{route('admin.application.index')}}" class="new_booking nav-link nav_prof_label" style="background-color: rgb(13, 81, 129); color: rgb(255, 255, 255); display: block;">
+                                <a href="{{route('admin.application.index')}}" class="btn" style="background-color: #ff9c07; color: rgb(255, 255, 255); display: block;">
                                     <i class="fas fa-plus-circle"></i>
-                                     Application Create
+                                     Create Case
                                 </a>
                             </li>
                         </ul>
-
+                        @endcan
+                        {{-- @can('customer_create_access')
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item dropdown notifications-menu">
-                                <a href="{{route('admin.customerusers.index')}}" class="new_booking nav-link nav_prof_label" style="background-color: rgb(13, 81, 129); color: rgb(255, 255, 255); display: block;">
+                                <a href="{{route('admin.customerusers.index')}}" class="new_booking nav-link nav_prof_label" style="background-color: rgb(180 29 40); color: rgb(255, 255, 255); display: block;">
                                     <i class="fas fa-plus-circle"></i>
                                     Customer Create
                                 </a>
                             </li>
                         </ul>
-                    </div>
-                </li>
-                <li class="nav-item dropdown notifications-menu">
-                    <a href="#" class="nav-link" data-toggle="dropdown" style="color:#405189;padding:0 20px 0 0;">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19 19">
-                            <g class="too-big-actually">
-                                <g class="bell-whole">
-                                    <path class="bell-part bell-part--ringer"
-                                        d="M9.5,17.5a2,2,0,0,0,2-2h-4A2,2,0,0,0,9.5,17.5Z" />
-                                    <path class="bell-part bell-part--main"
-                                        d="M16.23,12.82c-.6-.65-1.73-1.62-1.73-4.82a4.93,4.93,0,0,0-4-4.85V2.5a1,1,0,0,0-2,0v.65A4.94,4.94,0,0,0,4.5,8c0,3.2-1.13,4.17-1.73,4.82a1,1,0,0,0-.27.68,1,1,0,0,0,1,1h12a1,1,0,0,0,1-1A1,1,0,0,0,16.23,12.82Z" />
-                                </g>
-                            </g>
-                        </svg>
-                        @php
-                            $alertsCount = \Auth::user()->userUserAlerts()->where('read', false)->count();
-                        @endphp
-                        @if ($alertsCount > 0)
-                            <style>
-                                .bell-whole {
-                                    animation: ring 20s linear infinite;
-                                    transform-origin: 9.5px 2.4781px;
-                                }
-
-                                .bell-part {
-                                    fill: currentColor;
-                                }
-
-                                .bell-part--ringer {
-                                    animation: ding 20s linear infinite;
-                                }
-                            </style>
-                            <span class="badge badge-warning navbar-badge">
-                                {{ $alertsCount }}
-                            </span>
-                        @endif
-                    </a>
-                    <div class="dropdown-menu rollDiv dropdown-menu-lg dropdown-menu-right">
-                        @if (count(
-                                $alerts = \Auth::user()->userUserAlerts()->withPivot('read')->orderBy('created_at', 'ASC')->get()->reverse()) > 0)
-                            @foreach ($alerts as $alert)
-                                <div class="dropdown-item  bell-item">
-                                    <a href="{{ $alert->alert_link ? $alert->alert_link : '#' }}" target="_blank"
-                                        rel="noopener noreferrer">
-                                        @if ($alert->pivot->read === 0)
-                                            <strong>
-                                        @endif
-                                        {{ $alert->alert_text }}
-                                        @if ($alert->pivot->read === 0)
-                                            </strong>
-                                        @endif
-                                    </a>
-                                </div>
-                            @endforeach
-                        @else
-                            <div class="text-center">
-                                {{ trans('global.no_alerts') }}
-                            </div>
-                        @endif
+                        @endcan --}}
                     </div>
                 </li>
             </ul>
-            <ul class="navbar-nav">
-                <li class="nav-item dropdown notifications-menu">
-                    <a href="#" class="nav-link nav_prof_label"
-                        style="background-color:#0d5181;color:rgb(255, 255, 255);display:block;" data-toggle="dropdown">
+            <ul class="navbar-nav mx-2 align-items-center">
+                @can('enquiry_list_create')
+                    <li class="nav-item">
+                        <a class="btn btn-warning" href="{{ route('admin.enquiry_list.create') }}"
+                            class="nav-link {{ request()->is('admin/enquiry_list/create') || request()->is('admin/enquiry_list/create') ? 'active' : '' }}">
+                            Create Enquiry
+                        </a>
+                    </li>
+                @endcan
+                <li class="nav-item mx-2">
+                    <a id="toggleButton" title="{{ auth()->user()->name }}" class="nav-link nav_prof_label">
+                        <i class="fa fa-user"></i>
+                    </a>
+                </li>
+                
+                @if($roleTitle == 1)
+                <li class="nav-item">
+                    <div id="logoutDiv" style="display: none;min-width: 20rem !important;" class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        <div class="row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <div class="account-settings row justify-content-center">
+                                            <div class="user-profile col-sm-4">
+                                                <div class="user-avatar d-flex justify-content-center">
+                                                    @if ($user->file_path ?? '')
+                                                        <img class="uploaded_img" src="{{ asset('partner_images/'.$user->file_path) }}" alt="image" id='image_tag'>
+                                                    @else
+                                                        <img src="{{ asset('adminlogo/user-image.png') }}" alt="">
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="user-profile text-left">
+                                            <div>
+                                                <div class="me-2 fw-medium my-2">
+                                                    <i class="far fa-envelope"></i> {{ $user->email ??  'N/A'  }}
+                                                </div>
+                                                <div class="me-2 fw-medium my-2">
+                                                        <a style="color: #007bff;" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
+                                                            <i class="fas fa-lock"></i>
+                                                            Logout
+                                                        </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                        </div>
+                    </div>
+                </li>
+                @else
+                
+                <li class="nav-item">
+                    <div id="logoutDiv" style="display: none;" class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        <div class="row gutters">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <div class="account-settings row">
+                                            <div class="user-profile col-sm-4">
+                                                <div class="user-avatar d-flex justify-content-center">
+                                                    @if ($user->file_path ?? '')
+                                                        <img class="uploaded_img" src="{{ asset('partner_images/'.$user->file_path) }}" alt="image" id='image_tag'>
+                                                    @else
+                                                        <img src="{{ asset('adminlogo/user-image.png') }}" alt="">
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            @if($roleTitle != 1)
+                                            <div class="col-sm-8 position-relative">
+                                                <button type="button" title="Edit Profile Image" id='profile_Image' class="btn_borderless " data-user-id="{{ $user->id ?? 'N/a' }}" style="position:absolute; right:0;">
+                                                    <i class="far fa-edit"></i>
+                                                </button>
+                                                <h5 class="user-name profiles_name">{{ $user->name ?? 'N/A' }}</h5>
+                                                <h6 class="user-email">{{ ucwords($user->roles[0]->title) ?? 'N/A' }}</h6>
+                                            </div>
+                                            @endif
+                                        </div>
+                                        <div class="user-profile text-left">
+                                            <div>
+                                                <div class="me-2 fw-medium my-2">
+                                                    <i class="far fa-envelope"></i> {{ $user->email ??  'N/A'  }}
+                                                </div>
+                                                 @if($roleTitle != 1)
+                                                <div class="me-2 fw-medium my-2" >
+                                                    <i class="fas fa-phone" ></i> <span id='profiles_phone'> {{ $user->phone ??  'N/A'  }} </span>
+                                                </div>
+                                                @endif
+                                                <div class="me-2 fw-medium my-2">
+                                                        <a style="color: #007bff;" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
+                                                            <i class="fas fa-lock"></i>
+                                                            Logout
+                                                        </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                             
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 pl_lg_custom">
+                                <div class="card h-100">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="card-header">
+                                                Business Details Info
+                                            </div>
+                                            <div class="card-body">
+                                                <ul class="list-group">
+                                                   <li class="list-group-item">
+                                                      <div class="d-flex flex-wrap align-items-center">
+                                                         <div class="me-2 fw-medium">Name :</div>
+                                                         <span class="fs-12 text-muted profiles_name">&nbsp;{{ $user->name ?? 'N/A'  }}</span>
+                                                      </div>
+                                                   </li>
+                                                   <li class="list-group-item">
+                                                      <div class="d-flex flex-wrap align-items-center">
+                                                         <div class="me-2 fw-medium">Email :</div>
+                                                         <span class="fs-12 text-muted">&nbsp;{{ $user->email ?? 'N/A'  }}</span>
+                                                      </div>
+                                                   </li>
+                                                   <li class="list-group-item">
+                                                      <div class="d-flex flex-wrap align-items-center">
+                                                         <div class="me-2 fw-medium">Company Phone :</div>
+                                                         <span class="fs-12 text-muted" id='profiles_company_phone'>&nbsp;{{ $user->company_phone ??  'N/A'  }}</span>
+                                                      </div>
+                                                   </li>
+                                                   
+                                                    <li class="list-group-item">
+                                                      <div class="d-flex flex-wrap align-items-center">
+                                                         <div class="me-2 fw-medium">Company Address Line1 :</div>
+                                                         <span class="fs-12 text-muted" id='profiles_company_address1'>&nbsp;{{ $user->company_address_1 ??  'N/A'  }}</span>
+                                                      </div>
+                                                   </li>
+                                                    <li class="list-group-item">
+                                                      <div class="d-flex flex-wrap align-items-center">
+                                                         <div class="me-2 fw-medium">Company Address Line2 :</div>
+                                                         <span class="fs-12 text-muted" id='profiles_company_address2'>&nbsp;{{ $user->company_address_2 ??  'N/A'  }}</span>
+                                                      </div>
+                                                   </li>
+                                                     {{--
+                                                     <li class="list-group-item">
+                                                      <div class="d-flex flex-wrap align-items-center">
+                                                         <div class="me-2 fw-medium">Company Phone:</div>
+                                                         <span class="fs-12 text-muted">&nbsp;{{ $user->company_phone ??  'N/A'  }}</span>
+                                                      </div>
+                                                   </li>
+                                                  
+                                                  
+                                                   
+                                                 
+                                                   <li class="list-group-item">
+                                                      <div class="d-flex flex-wrap align-items-center">
+                                                         <div class="me-2 fw-medium">Role :</div>
+                                                         <span class="fs-12 text-muted">&nbsp;{{ $user->role ??  'N/A'  }}</span>
+                                                      </div>
+                                                   </li>
+                                                   <li class="list-group-item">
+                                                      <div class="d-flex flex-wrap align-items-center">
+                                                         <div class="me-2 fw-medium">Age :</div>
+                                                         <span class="fs-12 text-muted">&nbsp;{{ $user->age ??  'N/A'  }}</span>
+                                                      </div>
+                                                   </li>
+                                                   <li class="list-group-item">
+                                                      <div class="d-flex flex-wrap align-items-center">
+                                                         <div class="me-2 fw-medium">Experience :</div>
+                                                         <span class="fs-12 text-muted">&nbsp;{{ $user->experience ??  'N/A'  }}</span>
+                                                      </div>
+                                                   </li>
+                                                   --}}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        {{-- 
+                                        <div class="col-sm-6 pl-0">
+                                            <div class="card-header">
+                                                Contact Info
+                                            </div>
+                                            <div class="card-body">
+                                                <ul class="list-group">
+                                                   <li class="list-group-item">
+                                                      <div class="d-flex flex-wrap align-items-center">
+                                                         <div class="me-2 fw-medium">Name :</div>
+                                                         <span class="fs-12 text-muted">&nbsp;{{ $user->name ?? 'N/A'  }}</span>
+                                                      </div>
+                                                   </li>
+                                                   <li class="list-group-item">
+                                                      <div class="d-flex flex-wrap align-items-center">
+                                                         <div class="me-2 fw-medium">Email :</div>
+                                                         <span class="fs-12 text-muted">&nbsp;{{ $user->email ?? 'N/A'  }}</span>
+                                                      </div>
+                                                   </li>
+                                                   <li class="list-group-item">
+                                                      <div class="d-flex flex-wrap align-items-center">
+                                                         <div class="me-2 fw-medium">Phone :</div>
+                                                         <span class="fs-12 text-muted">&nbsp;{{ $user->phone ??  'N/A'  }}</span>
+                                                      </div>
+                                                   </li>
+                                                   <li class="list-group-item">
+                                                      <div class="d-flex flex-wrap align-items-center">
+                                                         <div class="me-2 fw-medium">Role :</div>
+                                                         <span class="fs-12 text-muted">&nbsp;{{ $user->role ??  'N/A'  }}</span>
+                                                      </div>
+                                                   </li>
+                                                   <li class="list-group-item">
+                                                      <div class="d-flex flex-wrap align-items-center">
+                                                         <div class="me-2 fw-medium">Age :</div>
+                                                         <span class="fs-12 text-muted">&nbsp;{{ $user->age ??  'N/A'  }}</span>
+                                                      </div>
+                                                   </li>
+                                                   <li class="list-group-item">
+                                                      <div class="d-flex flex-wrap align-items-center">
+                                                         <div class="me-2 fw-medium">Experience :</div>
+                                                         <span class="fs-12 text-muted">&nbsp;{{ $user->experience ??  'N/A'  }}</span>
+                                                      </div>
+                                                   </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        --}}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </li>
+                
+                @endif
+                
+                
+                
+                {{-- <li class="nav-item dropdown notifications-menu mx-2" id="logout_show">
+                    <a href="#" class="nav-link nav_prof_label" title="{{ auth()->user()->name }}"
+                        style="color: rgb(21 21 39);display:block;" data-toggle="dropdown"> --}}
 
                         {{-- @if (session('profile') != '' && session('profile') != null)
                             <img src="{{ asset(session('profile')) }}" alt="" style="border-radius:50%;"
                                 width="25px" height="25px">
 
                         @else --}}
-                        <i class="fa fa-user"></i>
+                        {{-- <i class="fa fa-user"></i> --}}
                         {{-- @endif --}}
-                        <span style="margin-left:0.75rem;">{{ auth()->user()->name }}</span>
-                    </a>
+                    {{-- </a>
                 </li>
                 <li class="nav-item dropdown notifications-menu">
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="logout_div">
                         <ul style="list-style-type:none;padding:0;">
                             <li> <a href="#" class="dropdown-item"
                                     onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
-                                    Logout </a></li>
+                                    Logout
+                                </a>
+                            </li>
                         </ul>
                     </div>
-                </li>
+                </li> --}}
             </ul>
 
         </nav>
@@ -511,6 +765,8 @@
                 @else
                     @yield('content')
                 @endif
+                
+                @include('admin.users.partials.add_profile')
 
 
             </section>
@@ -562,6 +818,8 @@
     {{-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script> --}}
+        
+         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
 
     <script>
@@ -702,6 +960,39 @@
         });
     </script>
     <script>
+
+        // New Roggle
+
+        $(document).ready(function(){
+            $('#logout_show').click(function(){
+                $('#logout_div').toggleClass('show');
+            });
+        });
+        
+        document.getElementById('toggleButton').addEventListener('click', function(event) {
+            var logoutDiv = document.getElementById('logoutDiv');
+            if (logoutDiv.style.display === 'none') {
+                logoutDiv.style.display = 'block';
+            } else {
+                logoutDiv.style.display = 'none';
+            }
+            // Prevent the event from bubbling up to the document
+            event.stopPropagation();
+        });
+
+        document.addEventListener('click', function(event) {
+            var logoutDiv = document.getElementById('logoutDiv');
+            var toggleButton = document.getElementById('toggleButton');
+            
+            // Check if the click is outside the logoutDiv and toggleButton
+            if (logoutDiv.style.display === 'block' && !logoutDiv.contains(event.target) && !toggleButton.contains(event.target)) {
+                logoutDiv.style.display = 'none';
+            }
+        });
+
+
+
+
         $(document).ready(function() {
             $('.searchable-field').select2({
                 minimumInputLength: 3,
@@ -1070,6 +1361,190 @@
                 })
         });
         //# sourceMappingURL=adminlte.min.js.map
+        
+        
+    </script>
+    
+    <script>
+    
+  let  loaders = $('.loading-overlay');
+    
+      $(document).ready(function() {
+             $(document).on('click', '#profile_Image', function(){
+                 
+                $('.error-message').remove();
+                $('input, select').removeClass('error');
+                
+                 loaders.show();
+            
+                $.ajax({
+                    url: "{{ route('admin.users.profile_current_data') }}",
+                    method: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: '',
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function() {
+                        loaders.show();
+                    },
+                    success: function(response) {
+                        if (response.status == true) {
+                            $('#profileForm').trigger("reset");
+                           var $data = response.data;
+                            if($data){
+                                
+                            
+                            $('#profile_name').val($data.name);
+                            $('#profile_phone').val($data.phone);
+                            $('#profile_company_address_1').val($data.company_address_1);
+                            $('#profile_company_address_2').val($data.company_address_2);
+                            $('#profile_company_phone').val($data.company_phone);
+                            $('#profile_form_modal').modal('show');
+                            }else{
+                                  Swal.fire("Error", 'No data found', "error");
+                            }
+                        
+                        }
+                        else{
+                            Swal.fire("Error", response.data, "error");
+                            
+                        }
+            
+                        loaders.hide();
+                    },
+                    error: function(jqXHR) {
+                        if (jqXHR.status === 422) {
+                            // Display validation errors
+                            let errors = jqXHR.responseJSON.errors;
+                            let errorMessage = '';
+            
+                            // Remove existing error messages
+                            $('.error-message').remove();
+                            $('input, select').removeClass('error');
+            
+                            $.each(errors, function(key, value) {
+                                errorMessage += value[0] + '<br>';
+                                // Optionally, you can also highlight the invalid fields
+                                $('input[name="' + key + '"], select[name="' + key + '"]').addClass('error');
+                                $('input[name="' + key + '"], select[name="' + key + '"]').after('<span class="error-message" style="color:red;">' + value[0] + '</span>');
+                            });
+            
+                            Swal.fire("Validation Error", errorMessage, "error");
+                        } else {
+                            Swal.fire("Error", "An unexpected error occurred.", "error");
+                        }
+            
+                        loaders.hide();
+                    }
+                });
+                
+            }) 
+            
+            
+         
+            $(document).on('click', '#profileSaveBtn', function(e) {
+                        e.preventDefault();
+                    
+                        // Get the form element
+                        var form = $('#profileForm')[0];
+                    
+                        // Create a FormData object from the form
+                        var formData = new FormData(form);
+                    
+                        // Append the file input manually if needed (already included in FormData)
+                        var profile_file_path = $('#profile_file_path').get(0).files[0];
+                        if (profile_file_path) {
+                            formData.append('profile_file_path', profile_file_path);
+                        }
+                    
+                        loaders.show();
+                    
+                        $.ajax({
+                            url: "{{ route('admin.users.profile_update') }}",
+                            method: "POST",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            beforeSend: function() {
+                                loaders.show();
+                            },
+                            success: function(response) {
+                                if (response.status == true) {
+                                    $('#profileForm').trigger("reset");
+                                    $('#profile_form_modal').modal('hide');
+                    
+                                    Swal.fire({
+                                        position: 'top-end',
+                                        icon: 'success',
+                                        title: 'Updated',
+                                        text: 'Your Profile Updated successfully',
+                                        showConfirmButton: false,
+                                        timer: 2000,
+                                    });
+                    
+                                    $('.error-message').remove();
+                                    $('input, select').removeClass('error');
+                                    
+                                    if(response.data){
+                                        let data = response.data;
+                                        
+                                        $('.profiles_name,#profiles_phone,#profiles_company_phone,#profiles_company_address1,#profiles_company_address2').html('')
+                                        $('.profiles_name').html('&nbsp;' + data.name)
+                                        $('#profiles_phone').html('&nbsp;' + data.phone)
+                                        $('#profiles_company_phone').html('&nbsp;' + data.company_phone)
+                                        $('#profiles_company_address1').html('&nbsp;' + data.company_address_1)
+                                        $('#profiles_company_address2').html('&nbsp;' + data.company_address_2)
+
+                                        if(data.file_path){
+                                            $('#image_tag').attr('src', '{{ asset('partner_images') }}/' + data.file_path);
+                                        }
+                                    }
+                                }
+                    
+                                loaders.hide();
+                            },
+                            error: function(jqXHR) {
+                                if (jqXHR.status === 422) {
+                                    // Display validation errors
+                                    let errors = jqXHR.responseJSON.errors;
+                                    let errorMessage = '';
+                    
+                                    // Remove existing error messages
+                                    $('.error-message').remove();
+                                    $('input, select').removeClass('error');
+                    
+                                    $.each(errors, function(key, value) {
+                                        errorMessage += value[0] + '<br>';
+                                        // Highlight the invalid fields
+                                        $('input[name="' + key + '"], select[name="' + key + '"]').addClass('error');
+                                        $('input[name="' + key + '"], select[name="' + key + '"]').after('<span class="error-message" style="color:red;">' + value[0] + '</span>');
+                                    });
+                    
+                                    Swal.fire("Validation Error", errorMessage, "error");
+                                } else {
+                                    Swal.fire("Error", "An unexpected error occurred.", "error");
+                                }
+                    
+                                loaders.hide();
+                            }
+                        });
+                });
+
+            
+         });
+         
+         
+          function validateInput(input) {
+            input.value = input.value
+                .replace(/[^0-9.]/g, '')  // Remove any non-numeric and non-period characters
+                .replace(/(\..*)\./g, '$1');  // Allow only one period
+        }
+        
     </script>
     @yield('scripts')
 </body>

@@ -20,11 +20,40 @@
             </button>
         @endif
     @endcan
+
 @endif
+
+{{--
+@if(isset($caseAssignGate))
+@can($caseAssignGate)
+
+    @if(isset($viewFunct1) && ($viewFunct1 != null || $viewFunct1 != '') )
+
+    <button class="newViewBtn assignClient" data-case-id='{{ $row->id }}' data-ref-id='{{ $row->ref_no }}'  title="Assign">
+        <i class="fa-fw nav-icon fa fa-user-plus"></i>
+    </button>
+
+    @elseif(isset($viewFunct2) &&($viewFunct2 != null || $viewFunct2 != ''))
+        <button class="newDeleteBtn removeClient" data-case-id="{{ $row->id }}" data-client-id="{{ $row->assigned_client_id }}" title="Remove">
+            <i class="fa-fw nav-icon fa fa-user-times"></i>
+        </button>
+
+    @endif
+    @endcan
+@endif 
+
+--}}
 
 @if (isset($editGate))
     @can($editGate)
-        @if ($editFunct != 'editExamfee')
+
+        @if($editFunct == 'editCase')
+            <a href="{{ route('admin.application-stage.edit',$row->id) }}" target='_blank' title="Preview"><i class="fa-fw nav-icon far fa-edit"></i></a>
+        @elseif ($editFunct == 'enquiry_list_edit')
+             @if(isset($row->status) && $row->status == "Enquiry")
+                <a href="{{ route('admin.enquiry_list.edit',$row->id) }}" target='_blank' title="Preview"><i class="fa-fw nav-icon far fa-edit"></i></a>
+            @endif
+        @elseif ($editFunct != 'editExamfee')
             @if (isset($row->id))
                 <button class="newEditBtn" onclick="{{ $editFunct }}({{ $row->id }})" title="Edit">
                     <i class="fa-fw nav-icon far fa-edit"></i>
@@ -68,12 +97,21 @@
 
 @if(isset($previewGate))
 @can($previewGate)
-
-
-
 <a href="{{ $weburl  }}" target='_blank' title="Preview"><i class="fa-fw nav-icon fas fa-globe-europe"></i></a>
-
 @endcan
+@endif
 
 
+@if (isset($uploadGate))
+    @can($uploadGate)
+
+        <button class="newViewBtn" onclick="{{ $uploadFunct }}({{ $row->id }})" title="Upload">
+            <i class="fa-fw nav-icon fas fa-solid fa-upload"></i>
+        </button>
+        
+        @if( isset($viewError) && $viewError == true)
+            <button title='{{ $rejectedDocumentTitlesString ?? ''}}' class="error-btn ">{{$count ?? 0}}</button>
+        @endif
+        
+    @endcan
 @endif

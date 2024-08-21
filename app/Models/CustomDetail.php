@@ -26,31 +26,22 @@ class CustomDetail extends Model
         'phone',
         'status',
         'address1',
-        'remark'
+        'address2',
+        'last_name'
     ];
 
 
-    public function Application()
+    public function Applications()
     {
 
-        return $this->hasOne(Application::class);
+        return $this->hasMany(Application::class);
     }
+    
+    public function application2()
+    {
 
-    // protected function serializeDate(DateTimeInterface $date)
-    // {
-    //     return $date->format('Y-m-d H:i:s');
-    // }
-    // public function user_name()
-    // {
-    //     return $this->belongsTo(User::class, 'user_name_id');
-    // }
-
-    // public function enroll_master_number()
-    // {
-    //     return $this->belongsTo(CourseEnrollMaster::class, 'enroll_master_number_id');
-    // }
-    // public function class_room()
-    // {
-    //     return $this->belongsTo(ClassRoom::class, 'enroll_master_number_id');
-    // }
+        return $this->hasMany(Application::class, 'customer_id', 'id');
+    }
+    
+   
 }

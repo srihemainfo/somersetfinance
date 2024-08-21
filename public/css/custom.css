@@ -615,3 +615,480 @@ div.dt-button-collection {
 .search-input-container {
     overflow: hidden !important;
 }
+
+/* Document Upload */
+
+.document_status_img {
+    width: 60%;
+}
+
+.input {
+    max-width: 190px;
+    display: none;
+}
+
+.labelFile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 250px;
+    height: 190px;
+    border: 2px dashed #ccc;
+    align-items: center;
+    text-align: center;
+    padding: 5px;
+    color: #404040;
+    cursor: pointer;
+}
+
+.modal-fullscreen {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    max-width: 100%;
+}
+
+.modal-fullscreen .modal-content {
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+}
+
+.modal-fullscreen .modal-body {
+    overflow-y: auto;
+}
+
+.uploaded_file {
+    width: 100%;
+    border: 2px solid gray;
+    border-radius: 10px;
+    height: 190px;
+    text-align: center;
+    padding: 10px;
+    box-shadow: -1px 1px 0px 0px gray;
+}
+
+.border_red {
+    border-color: red !important;
+}
+.border_orange {
+    border-color: orange !important;
+}
+.border_green {
+    border-color: green !important;
+}
+
+
+.uploaded_file input {
+    position: absolute;
+}
+
+.btn-custom {
+    border:none !important;
+}
+
+.btn-custom:hover {
+    background:transparent !important;
+    color:initial !important;
+}
+
+.delete-checkbox,.form_delete-checkbox,.addition_delete_checkbox,.form_additional_delete-checkbox {
+    z-index: 999;
+}
+
+.upload_file_button {
+    position: absolute;
+    top: 50px;
+    bottom: 50%;
+    right: 10px;
+    flex-direction: column;
+    gap: 10px;
+    opacity: 0;
+    transition: .5s;
+}
+
+.upload_remark {
+    position: absolute;
+    width: 90%;
+    bottom: 30px;
+    opacity: 0;
+    transition: .5s;
+}
+
+.uploaded_file img {
+    transition: .5s;
+}
+
+.uploaded_file:hover {
+
+    .upload_file_button, .upload_remark {
+        opacity: 1;
+    }
+
+    img, iframe {
+        filter: blur(1px);
+    }
+    
+}
+
+
+.pane {
+    outline: 2px solid #777;
+    height: 1cm;
+    width: 3.05cm;
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+    transition: 0.7s ease;
+}
+
+.input {
+    display: none;
+}
+
+.label {
+    height: 1cm;
+    width: 1.5cm;
+    float: left;
+    font-weight: 600;
+    letter-spacing: -1px;
+    font-size: 14px;
+    padding: 0px;
+    position: relative;
+    z-index: 1;
+    color: #000;
+    text-align: center;
+    padding-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.label:hover {
+    cursor: pointer;
+}
+
+.preview_selection {
+    display: none;
+    position: absolute;
+    height: 1cm;
+    width: calc(4.5cm / 3);
+    z-index: 0;
+    left: 0;
+    top: 0;
+    transition: .15s ease;
+}
+
+.label:has(input:checked) {
+    color: #fff;
+}
+
+.label:has(.yes:checked) ~ .preview_selection {
+    background-color: #00ff6a;
+    display: inline-block;
+}
+
+.label:has(.no:checked) ~ .preview_selection {
+    background-color: #ff0000;
+    display: inline-block;
+}
+
+.label:has(.no:checked) ~ .extra-input {
+    display: block;
+}
+
+.label:has(.idk:checked) ~ .preview_selection {
+    background-color: gray;
+    display: inline-block;
+}
+
+.label:nth-child(1):has(input:checked) ~ .preview_selection {
+    transform: translateX(calc(4.5cm * 0/3));
+}
+
+.label:nth-child(2):has(input:checked) ~ .preview_selection {
+    transform: translateX(calc(4.5cm * 1/3));
+}
+
+.label:nth-child(3):has(input:checked) ~ .preview_selection {
+    transform: translateX(calc(4.5cm * 2/3));
+}
+
+/* Hide the extra input field by default */
+/* .extra_input {
+    display: none;
+    margin-top: 10px;
+} */
+
+/*Profile View*/
+
+.profile_view {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+/*.profile_view h1 {*/
+/*    display: inline-block;*/
+/*    font-size: 24px;*/
+/*    margin-bottom: 10px;*/
+/*}*/
+
+.profile_view h1 span {
+    cursor:pointer;
+}
+
+.profile_view p {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.profile_view i {
+    margin-right: 5px;
+    color: #888;
+}
+
+.card-title {
+    font-size: 16px;
+    margin: 0 0 7px 0;
+}
+
+.card {
+    margin-bottom: 1.5rem;
+    -webkit-box-shadow: 0 1px 2px rgba(56, 65, 74, 0.15);
+    box-shadow: 0 1px 2px rgba(56, 65, 74, 0.15);
+}
+
+.btn_borderless {
+    border:none;
+    background:transparent;
+    color:#939185;
+}
+
+.btn_borderless:focus {
+    outline: none !important;
+}
+
+.btn_borderless:focus-visible {
+    outline: none !important;
+}
+
+.btn_borderless.download_btn {
+    color:#8D493A;
+}
+
+/*Show Stages*/
+
+.stage_view {
+    padding: 7px 10px 25px 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.stage {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    margin: 5px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stage::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    width: 135px;
+    height: 2px;
+    background-color: #ddd;
+    /*z-index: -1;*/
+}
+
+.stage:last-child::before {
+    display: none;
+}
+
+.enquiry::after {
+    content: "Enquiry";
+    position: absolute;
+    bottom: -25px;
+    width: 100%;
+    text-align: center;
+}
+
+.underwriting::after {
+    content: "Underwriting";
+    position: absolute;
+    bottom: -25px;
+    width: 100%;
+    text-align: center;
+}
+
+.processing::after {
+    content: "Processing";
+    position: absolute;
+    bottom: -25px;
+    width: 100%;
+    text-align: center;
+}
+
+.completion::after {
+    content: "Submitted";
+    position: absolute;
+    bottom: -25px;
+    width: 100%;
+    text-align: center;
+}
+
+.complete::after {
+    content: "Completed";
+    position: absolute;
+    bottom: -25px;
+    width: 100%;
+    text-align: center;
+}
+
+.completed {
+    color: #155724;
+    border: 2px solid #6ee188;
+    background-color: #fff;
+    background-image: url(../formupload/stage_approved.png);
+    background-size: 40px 40px;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative;
+}
+
+.current {
+    color: #856404;
+    border: 2px solid #ffcc30;
+    background-color: #fff;
+    background-image: url(../formupload/stage_processed.png);
+    background-size: 40px 40px;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative;
+}
+
+.upcoming {
+    color: #898989;
+    border: 2px solid #ddd;
+    background-color: #fff;
+    background-image: url(../formupload/stage_upcoming.png);
+    background-size: 40px 40px;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative;
+}
+
+@media (max-width: 767px) {
+    
+    .stage::before {
+        width: 85px !important;
+    }
+    
+    #form-modal {
+        width: 70% !important;
+    }
+    
+    /*Options View on Tab & Mobile Devices*/
+    
+    .upload_file_button, .upload_remark {
+        opacity: 1 !important;
+    }
+    
+}
+
+@media (max-width: 576px) {
+    
+    .stage {
+        width: 40px !important;
+        height: 35px !important;
+    }
+    
+    .completed, .current, .upcoming {
+        background-size: 20px 20px !important;
+    }
+    
+    .enquiry::after, .underwriting::after, .processing::after, .completion::after, .complete::after {
+        bottom: -25px !important;
+        font-size: 7px !important;
+    }
+    
+    .stage::before {
+        width: 45px !important;
+    }
+    
+}
+
+.invisible_scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.customized_scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  background-color: #aaa;
+}
+
+.customized_scrollbar::-webkit-scrollbar-thumb {
+  background: #000;
+}
+
+.profile_details td, .profile_details th {
+    padding: 5px !important;
+}
+
+.upload_document_modal {
+    outline:none !important;
+}
+
+.close {
+    outline:none !important;
+}
+
+.select2-selection--single {
+    height: 33px !important;
+}
+
+.select2-selection__choice {
+    background: #4f95f6 !important;
+}
+
+.select2-selection__choice span {
+    color: #fff !important;
+}
+
+.error-btn {
+    border-radius: 50px;
+    padding: 0 7px 0 7px;
+    border: 2px solid red;
+    background: red;color: #fff;
+    cursor: pointer;
+    border: none !important;
+    outline: none !important;
+}
+
+/*Dashboard Accordion Flush*/
+
+.accordion-flush .card-header {
+    padding: 0;
+    border: 0;
+}
+.accordion-flush .btn-link {
+    width: 100%;
+    text-align: left;
+    padding: 0.75rem 1.25rem;
+}
+.accordion-flush .card {
+    border: 0;
+}
+
+#case_number {
+    cursor: pointer;
+}
+

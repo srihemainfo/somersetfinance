@@ -3294,8 +3294,8 @@ input[type="submit"].btn-block {
     z-index: 1000;
     display: none;
     float: left;
-    min-width: 10rem;
-    padding: 0.5rem 0;
+    min-width: 40rem !important;
+    padding: 0.5rem !important;
     margin: 0.125rem 0 0;
     font-size: 1rem;
     color: #212529;
@@ -6930,6 +6930,10 @@ button.bg-dark:hover {
     justify-content: space-between !important;
 }
 
+.justify-content-evenly {
+    justify-content: space-evenly !important;
+}
+
 .justify-content-around {
     justify-content: space-around !important;
 }
@@ -9942,6 +9946,7 @@ html {
     padding-right: 1rem;
     overflow-y: auto;
     height: calc(100% - 4rem);
+    background: #151528;
 }
 
 .user-panel {
@@ -11332,7 +11337,7 @@ html {
     .sidebar-mini.sidebar-collapse .main-sidebar,
     .sidebar-mini.sidebar-collapse .main-sidebar:before {
         margin-left: 0;
-        width: 4.6rem;
+        width: 4.5rem;
     }
 
     .sidebar-mini.sidebar-collapse .main-sidebar .user-panel .image {
@@ -11711,6 +11716,7 @@ html {
 
 label:not(.form-check-label):not(.custom-file-label) {
     font-weight: 700;
+    font-size: 0.9rem;
 }
 
 .progress {
@@ -11936,7 +11942,7 @@ label:not(.form-check-label):not(.custom-file-label) {
     position: relative;
     background-color: transparent;
     color: #073d62;
-    font-size: 1.2rem;
+    font-size: 1rem;
     border-bottom: 1px solid #007bff52;
     border-top-left-radius: 0.25rem;
     border-top-right-radius: 0.25rem;
@@ -13627,7 +13633,7 @@ label:not(.form-check-label):not(.custom-file-label) {
 .select2-container--default .select2-selection--single,
 .select2-selection .select2-selection--single {
     border: 1px solid #d2d6de;
-    padding: 6px 12px;
+    padding: 5px;
     height: 34px;
 }
 
@@ -16532,48 +16538,141 @@ button:hover {
 /* Custom scrollbar for WebKit-based browsers (e.g., Chrome, Safari) */
 ::-webkit-scrollbar {
     width: 8px; /* Width of the scrollbar */
-  }
+}
 
-  ::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
     background-color: #888; /* Color of the scrollbar thumb (handle) */
     border-radius: 5px; /* Rounded corners for the thumb */
-  }
+}
 
-  ::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
     background-color: #006cdf; /* Color of the scrollbar thumb on hover */
-  }
+}
 
-  ::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
     background-color: #f1f1f1; /* Color of the scrollbar track */
-  }
+}
 
-  /* Hide vertical scrollbar on Firefox */
-  html {
+/* Hide vertical scrollbar on Firefox */
+html {
     scrollbar-width: thin;
-  }
+}
 
-  /* Custom scrollbar for Firefox */
-  html::-webkit-scrollbar {
+/* Custom scrollbar for Firefox */
+html::-webkit-scrollbar {
     width: 8px; /* Width of the scrollbar */
-  }
+}
 
-  html::-webkit-scrollbar-thumb {
+html::-webkit-scrollbar-thumb {
     background-color: #888; /* Color of the scrollbar thumb (handle) */
     border-radius: 5px; /* Rounded corners for the thumb */
-  }
+}
 
-  html::-webkit-scrollbar-thumb:hover {
+html::-webkit-scrollbar-thumb:hover {
     background-color: #006cdf; /* Color of the scrollbar thumb on hover */
-  }
+}
 
-  html::-webkit-scrollbar-track {
+html::-webkit-scrollbar-track {
     background-color: #f1f1f1; /* Color of the scrollbar track */
-  }
+}
 
-  /* Show horizontal scrollbar */
-  body {
+/* Show horizontal scrollbar */
+body {
     overflow-x: auto;
-  }
+}
 
-  
+.pl_lg_custom {
+    padding-left: 0 !important;
+}
+
+@media (max-width: 576px) {
+    .dropdown-menu {
+        min-width:10rem !important;
+    }
+    
+    .pl_lg_custom {
+        padding-left: 1rem !important;
+        padding-top: 1rem !important;
+    }
+}
+
+
+/*New CSS for Size Adjustment*/
+
+table.dataTable tbody th, table.dataTable tbody td {
+    padding: 4px 5px !important;
+    font-size: 0.8rem !important;
+}
+
+table.dataTable thead th, table.dataTable thead td {
+    padding: 5px 9px !important;
+    font-size: 0.8rem !important;
+}
+
+table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:after, table.dataTable thead .sorting_asc_disabled:after, table.dataTable thead .sorting_desc_disabled:after {
+    right: -0.5em !important;
+    font-size: 0.8rem !important;
+}
+
+table.dataTable thead .sorting:before, table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_desc:before, table.dataTable thead .sorting_asc_disabled:before, table.dataTable thead .sorting_desc_disabled:before {
+    right: 0em !important;
+}
+
+table.dataTable thead .sorting:before, table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:before, table.dataTable thead .sorting_desc:after, table.dataTable thead .sorting_asc_disabled:before, table.dataTable thead .sorting_asc_disabled:after, table.dataTable thead .sorting_desc_disabled:before, table.dataTable thead .sorting_desc_disabled:after {
+    bottom: 0.4rem !important;
+}
+
+select.form-control:not([size]):not([multiple]) {
+    height: calc(2rem + 2px) !important;
+}
+
+.form-control {
+    padding: 5px !important;
+    /*line-height: 0 !important;*/
+    font-size: 0.8rem !important;
+}
+
+.col-form-label {
+    font-size: 0.8rem !important;
+}
+
+/*Font Size*/
+
+.btn, .div.dataTables_wrapper div.dataTables_info, .page-link, .main-footer {
+    font-size: 0.8rem !important;
+}
+
+.card-body {
+    padding: 0.8rem !important;
+}
+
+.card-header {
+    padding: .575rem .825rem !important;
+}
+
+.table td, .table th {
+    padding: .5rem !important;
+}
+
+.card-body hr {
+    margin: 10px 0 !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

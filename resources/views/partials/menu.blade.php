@@ -1,6 +1,6 @@
-<aside class="main-sidebar" style="min-height: 917px; background-color: #0f5381;">
+<aside class="main-sidebar" style="min-height: 917px; background-color: rgb(21 21 39);">
     <!-- Brand Logo -->
-    <a href="#" class="brand-link text-center" style="background-color: rgb(255, 255, 255)">
+    <a href="{{ route('admin.home') }}" class="brand-link text-center" style="background-color: rgb(255, 255, 255);">
         <span class="brand-text font-weight-light">
             <img src="{{ asset('adminlogo/logo.png') }}" alt="" width="100%">
         </span>
@@ -136,17 +136,18 @@
                     </li>
                 @endcan
 
-
+                @can('customer_create_access')
                 <li class="nav-item">
                     <a href="{{ route('admin.customerusers.index') }}"
                         class="nav-link {{ request()->is('admin/customerusers') || request()->is('admin/customerusers*') ? 'active' : '' }}">
                         <i class="fas nav-icon fa-users">
                         </i>
                         <p>
-                           User Create
+                           Create Customer
                         </p>
                     </a>
                 </li>
+                @endcan
 
 
                 <!-- <li class="nav-item">
@@ -159,33 +160,65 @@
                         </p>
                     </a>
                 </li> -->
-
-
+             @can('enquiry_list_access')
                 <li class="nav-item">
-                    <a href="{{ route('admin.application-stage.index') }}"
-                        class="nav-link {{ request()->is('admin/application-stage') || request()->is('admin/application-stage*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.enquiry_list.index') }}"
+                        class="nav-link {{ request()->is('admin/enquiry_list') || request()->is('admin/enquiry_list*') ? 'active' : '' }}">
                         <i class="fas nav-icon fa-vote-yea">
                         </i>
                         <p>
-                           Cases Stage
+                           Enquiry List
                         </p>
                     </a>
                 </li>
+            @endcan
 
+                @can('case_access')
+                <li class="nav-item">
+                    <a href="{{ route('admin.application-stage.index') }}"
+                        class="nav-link {{ request()->is('admin/case-list') || request()->is('admin/case-list*') ? 'active' : '' }}">
+                        <i class="fas nav-icon fa-vote-yea">
+                        </i>
+                        <p>
+                           Cases List
+                        </p>
+                    </a>
+                </li>
+                @endcan
+                
+                @can('partner_edge_access')
+                <li class="nav-item">
+                    <a href="{{ route('admin.partner-edge.index') }}"
+                        class="nav-link {{ request()->is('admin/partner-edge') || request()->is('admin/partner-edge*') ? 'active' : '' }}">
+                        <i class="fas nav-icon fa-vote-yea">
+                        </i>
+                        <p>
+                           Partner Edge 
+                        </p>
+                    </a>
+                </li>
+                @endcan
+
+                {{-- @can('case_stage_access')
                 <li class="nav-item">
                     <a href="{{ route('admin.application.index') }}"
                         class="nav-link {{ request()->is('admin/application') || request()->is('admin/application*') ? 'active' : '' }}">
                         <i class="fas nav-icon fa-pencil-alt">
                         </i>
-                        <p>Application create
+                        <p>Case create
                         </p>
                     </a>
                 </li>
+                @endcan --}}
 
-                @can('enquire_access')
+                @can('tools_access')
+
+                @php
+                    $isMenuOpen = request()->is('admin/loanType*') || request()->is('admin/document_type*') || request()->is('admin/form_upload*');
+                @endphp
                 <li
-                    class="nav-item has-treeview {{ request()->is('admin/model*') ? 'menu-open' : '' }}  {{ request()->is('admin/seller_enquire*') ? 'menu-open' : '' }}  ">
-                    <a class="nav-link nav-dropdown-toggle {{ request()->is('admin/model*') ? 'active' : '' }} {{ request()->is('admin/seller_enquire*') ? 'menu-open' : '' }}  "
+                    class="nav-item has-treeview {{ $isMenuOpen ? 'menu-open' : '' }}  ">
+                    <a class="nav-link nav-dropdown-toggle {{ $isMenuOpen ? 'active' : '' }}"
                         href="#">
                         <i class="fa-fw nav-icon fas fa-pencil-ruler">
 
@@ -196,7 +229,7 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview" style=" ">
-                    @can('brand_access')
+                    @can('loan_type_access')
                                 <li class="nav-item">
                                     <a href="{{ route('admin.loanType.index') }}"
                                         class="nav-link {{ request()->is('admin/loanType') || request()->is('admin/loanType*') ? 'active' : '' }}">
@@ -210,10 +243,10 @@
                     @endcan
 
 
-                    @can('brand_access')
+                    @can('document_type_access')
                                 <li class="nav-item">
-                                    <a href="{{ route('admin.brand.index') }}"
-                                        class="nav-link {{ request()->is('admin/brand') || request()->is('admin/brand*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.document_type.index') }}"
+                                        class="nav-link {{ request()->is('admin/document_type') || request()->is('admin/document_type*') ? 'active' : '' }}">
                                         <i class="fas nav-icon fa-upload">
                                         </i>
                                         <p>
@@ -221,10 +254,33 @@
                                         </p>
                                     </a>
                                 </li>
-                            @endcan
+                    @endcan
+
+                    @can('form_upload_access')
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.form_upload.index') }}"
+                                        class="nav-link {{ request()->is('admin/form_upload') || request()->is('admin/form_upload*') ? 'active' : '' }}">
+                                        <i class="fas nav-icon fa-upload">
+                                        </i>
+                                        <p>
+                                            Form Upload
+                                        </p>
+                                    </a>
+                                </li>
+                    @endcan
                     </ul>
                 </li>
                 @endcan
+
+                {{-- <li class="nav-item">
+                    <a href="{{ route('admin.document.index','none') }}"
+                        class="nav-link {{ request()->is('admin/document') || request()->is('admin/document*') ? 'active' : '' }}">
+                        <i class="fas nav-icon fa-pencil-alt">
+                        </i>
+                        <p>Document upload
+                        </p>
+                    </a>
+                </li> --}}
 
                 {{--
                 @can('tools_access')

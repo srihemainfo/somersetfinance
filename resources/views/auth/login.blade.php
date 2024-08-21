@@ -235,7 +235,7 @@
                     {{ session('error') }}
                 </div>
             @endif
-            <div class="col-left">
+            <div class="col-left d-flex align-items-center">
                 <div class="login-text -MB2">
                     <a href="{{ route('admin.home') }}">
                         <img src="{{ asset('adminlogo/favicon.png') }}" alt="" width="100%">

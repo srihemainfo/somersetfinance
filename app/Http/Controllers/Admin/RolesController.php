@@ -38,14 +38,13 @@ class RolesController extends Controller
     public function store(StoreRoleRequest $request)
     {
 
-        $existingRecord = Role::where('type_id', $request->type_id)
-            ->where('title', $request->title)
+        $existingRecord = Role::where('title', $request->title)
             ->first();
 
         if ($existingRecord) {
             return back()->withInput()->with('error', 'Combination already exists.');
         } else {
-
+            
             $role = Role::create($request->all());
             $role->permissions()->sync($request->input('permissions', []));
             return redirect()->route('admin.roles.index')->with('message', 'Role created successfully');
@@ -56,13 +55,13 @@ class RolesController extends Controller
     {
         abort_if(Gate::denies('role_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $types = TeachingType::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        // $types = TeachingType::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $permissions = Permission::pluck('title', 'id');
 
         $role->load('type', 'permissions');
 
-        return view('admin.roles.edit', compact('permissions', 'role', 'types'));
+        return view('admin.roles.edit', compact('permissions', 'role'));
     }
 
     public function update(UpdateRoleRequest $request, Role $role)
@@ -77,12 +76,11 @@ class RolesController extends Controller
             $title[] = $permission->id;
         }
 
-        if (($record->type_id == $request->type_id && $record->title === $request->title && $title == $request->permissions)) {
+        if (( $record->title === $request->title && $title == $request->permissions)) {
 
             return redirect()->route('admin.roles.index');
         } else {
-            $existingRecord = Role::where('type_id', $request->type_id)
-                ->where('title', $request->title)
+            $existingRecord = Role::where('title', $request->title)
                 ->where('id', '!=', $id) // Exclude the current ID
                 ->first();
 

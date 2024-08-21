@@ -6,24 +6,9 @@
                 <a class="btn btn-outline-success" href="{{ route('admin.users.create') }}">
                     {{ trans('global.add') }} {{ trans('cruds.user.title_singular') }}
                 </a>
-                <a class="btn btn-outline-danger" href="{{ route('admin.users.block') }}">
-                    Block User
-                </a>
-                {{-- <a class="btn btn-info" href="{{ route('admin.users.unblock') }}">
-                Unblock User
-            </a> 
-                <button class="btn btn-outline-secondary" data-toggle="modal" data-target="#csvImportModal">
-                    {{ trans('global.app_csvImport') }}
-                </button>
-                @include('csvImport.modal', ['model' => 'User', 'route' => 'admin.users.parseCsvImport'])
-
-                --}}
+                
             </div>
-            <div class="col-lg-2" style="text-align:right;">
-                <a class="btn btn-outline-danger" href="{{ route('admin.users.block_list') }}">
-                    Blocked List
-                </a>
-            </div>
+           
         </div>
     @endcan
     <div class="card">
@@ -50,9 +35,7 @@
                         <th>
                             Email
                         </th>
-                        <th>
-                            Role Type
-                        </th>
+                      
                         <th>
                             Roles
                         </th>
@@ -101,7 +84,15 @@
                                         _method: 'DELETE'
                                     }
                                 })
-                                .done(function() {
+                                .done(function(response) {
+                                    
+                                    if (response.status === 'success') {
+                                            Swal.fire("Success", response.data, "success");
+                                    } else {
+                                        Swal.fire("Error", response.data, "error");
+                                    }
+                                    
+                                     
                                     location.reload()
                                 })
                         }
@@ -134,10 +125,7 @@
                         data: 'email',
                         name: 'email'
                     },
-                    {
-                        data: 'role_type',
-                        name: 'role_type'
-                    },
+                  
                     {
                         data: 'roles',
                         name: 'roles.title'

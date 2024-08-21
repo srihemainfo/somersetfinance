@@ -12,17 +12,26 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="form-group">
-                            <label for="name" class="col-form-label">Full Name<span class="required">&nbsp;*</span></label>
-                            <input type="text" class="form-control" name="name" id="name" placeholder="Enter Name">
+                            <label for="name" class="col-form-label">First Name<span class="required">&nbsp;</span></label>
+                            <input type="text" class="form-control" name="name" id="name" placeholder="Enter First Name">
                             <p class="text-danger invalid-name"></p>
                         </div>
                     </div>
+                    
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label for="last_name" class="col-form-label">Last Name<span class="required">&nbsp;</span></label>
+                            <input type="text" class="form-control" name="last_name" id="last_name" placeholder="Enter Last Name">
+                            <p class="text-danger invalid-last_name"></p>
+                        </div>
+                    </div>
+                    
                 </div>
 
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="form-group">
-                            <label for="email" class="col-form-label">Email</label>
+                            <label for="email" class="col-form-label">Email <span class="required">&nbsp;</span></label>
                             <input type="text" class="form-control" name="email" id="email" placeholder="Enter Email">
                             <p class="text-danger invalid-email"></p>
                         </div>
@@ -31,7 +40,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="form-group">
-                            <label for="phone" class="col-form-label">Phone No.<span class="required">&nbsp;*</span></label>
+                            <label for="phone" class="col-form-label">Phone No.<span class="required">&nbsp;</span></label>
                             <input type="text" class="form-control" name="phone" id="phone" placeholder="Enter Phone No.">
                             <p class="text-danger invalid-phone-no"></p>
                         </div>
@@ -41,26 +50,25 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="form-group">
-                            <label for="address1" class="col-form-label">Address</label>
-                            <textarea class="form-control" name="address1" id="address1"></textarea>
+                            <label for="address1" class="col-form-label">Address Line 1</label>
+                             <input type="text" class="form-control" name="address1" id="address1" placeholder="Enter Address line 1">
+                            {{--<textarea class="form-control" name="address1" id="address1"></textarea>--}}
                             <p class="text-danger"></p>
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                
+                 <div class="row">
                     <div class="col-sm-12">
                         <div class="form-group">
-                            <label for="remarks" class="col-form-label">Remarks</label>
-                            <textarea class="form-control" name="remarks" id="remarks"></textarea>
+                            <label for="address1" class="col-form-label">Address Line 2</label>
+                             <input type="text" class="form-control" name="address2" id="address2" placeholder="Enter Address line 2">
+                            {{--<textarea class="form-control" name="address1" id="address1"></textarea>--}}
                             <p class="text-danger"></p>
                         </div>
                     </div>
                 </div>
-
-
-                <div class="row">
-
-                </div>
+              
 
                 <input type="hidden" name="customer_id" id="customer_id">
               </form>

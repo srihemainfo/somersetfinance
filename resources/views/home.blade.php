@@ -16,142 +16,8 @@
         }
         // echo $roleTitle ;
     @endphp
-
-
-    @if ($roleTitle == 1)
-        <div class="content">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-header">
-                            Dashboard
-                        </div>
-                        <div class="card-body">
-                            @if (session('status'))
-                                <div class="alert alert-success" role="alert">
-                                    {{ session('status') }}
-                                </div>
-                            @endif
-                            <div class="row">
-                                <div class="col-lg-4 col-6">
-
-                                    <div class="small-box bg-info">
-                                        <div class="inner">
-                                            <h3 class="counter-value">{{ $sellvehiclecount }}</h3>
-                                            <p>Enquiry</p>
-                                        </div>
-                                        <div class="icon">
-                                            <i class="ion ion-person"></i>
-                                        </div>
-                                        <a href="{{ route('admin.sellvehicle.index') }}" class="small-box-footer">More
-                                            info
-                                            <i class="fas fa-arrow-circle-right"></i></a>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-4 col-6">
-
-                                    <div class="small-box bg-success">
-                                        <div class="inner">
-                                            <h3 class="counter-value">{{ $sellerEnquirecount }}<sup
-                                                    style="font-size: 20px"></sup></h3>
-                                            <p>Underwriting</p>
-                                        </div>
-                                        <div class="icon">
-                                            <i class="ion ion-person"></i>
-                                        </div>
-                                        <a href="{{ route('admin.seller_enquire.index') }}" class="small-box-footer">More
-                                            info
-                                            <i class="fas fa-arrow-circle-right"></i></a>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-4 col-6">
-
-                                    <div class="small-box bg-warning">
-                                        <div class="inner">
-                                            <h3 class="counter-value">{{ $buyerEnquirecount }}</h3>
-                                            <p>Processing</p>
-                                        </div>
-                                        <div class="icon">
-                                            <i class="ion ion-person-add"></i>
-                                        </div>
-                                        <a href="{{ route('admin.buyer_enquire.index') }}" class="small-box-footer">More
-                                            info <i class="fas fa-arrow-circle-right"></i></a>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-2 col-6">
-
-                                    <div class="small-box bg-danger">
-                                        <div class="inner">
-                                            <h3 class="counter-value">50</h3>
-                                            <p>Completions</p>
-                                        </div>
-                                        <div class="icon">
-                                            <i class="ion ion-person"></i>
-                                        </div>
-                                        <a href="{{ route('admin.users.block_list') }}" class="small-box-footer">More info
-                                            <i class="fas fa-arrow-circle-right"></i></a>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-2 col-6">
-
-                                    <div class="small-box bg-danger">
-                                        <div class="inner">
-                                            <h3 class="counter-value">50</h3>
-                                            <p>Completed</p>
-                                        </div>
-                                        <div class="icon">
-                                            <i class="ion ion-person"></i>
-                                        </div>
-                                        <a href="{{ route('admin.users.block_list') }}" class="small-box-footer">More info
-                                            <i class="fas fa-arrow-circle-right"></i></a>
-                                    </div>
-                                </div>
-
-                                {{-- <div class="col-lg-2 col-6">
-
-                                    <div class="small-box bg-success">
-                                        <div class="inner">
-                                            <h3 class="counter-value">0<sup
-                                                    style="font-size: 20px"></sup></h3>
-                                            <p>Fees Collection</p>
-                                        </div>
-                                        <div class="icon">
-                                            <!--<i class="ion ion-person"></i>-->
-                                            <i class="fas fa-rupee-sign"></i>
-                                        </div>
-                                        <a href="#"
-                                            class="small-box-footer">More info
-                                            <i class="fas fa-arrow-circle-right"></i></a>
-                                    </div>
-                                </div> --}}
-
-                                {{-- <div class="col-lg-2 col-6">
-
-                                    <div class="small-box bg-info">
-                                        <div class="inner">
-                                            <h3 class="counter-value"><pre> </pre></h3>
-                                            <p>Events and Announcement</p>
-                                        </div>
-                                        <div class="icon">
-                                            <!--<i class="ion ion-person"></i>-->
-                                            <i class="fas fa-bullhorn"></i>
-                                        </div>
-                                        <a href="#" class="small-box-footer">More
-                                            info
-                                            <i class="fas fa-arrow-circle-right"></i></a>
-                                    </div>
-                                </div> --}}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        @if (session('status'))
+    
+         @if (session('status'))
             <div class="content">
                 <div class="col-lg-6 col-6">
 
@@ -176,177 +42,372 @@
                 </div>
             </div>
         @endif
-    @endif
-    @can('calender_show_access')
-        {{-- @if ($check != 'empty')
-            <style>
-                .color-box {
-                    width: 18px;
-                    height: 18px;
-                }
-            </style>
-            <div class="col-12">
-                <div class="card">
-                    <div style="padding: 10px" class="d-flex flex-wrap justify-content-between align-items-center">
-                        <strong class="mb-2">{{ DateTime::createFromFormat('!m', $month)->format('F') }}</strong>
-                        <strong class="mb-2">{{ $year }}</strong>
-                        <div class="d-flex flex-wrap">
-                            <div class="d-flex align-items-center mr-3">
-                                <div class="color-box" style="background-color: #FFD5D6;"></div>
-                                <div class="ml-2">Holiday</div>
+
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            Dashboard
+                        </div>
+                        <div class="card-body">
+                            @if (session('status'))
+                                <div class="alert alert-success" role="alert">
+                                    {{ session('status') }}
+                                </div>
+                            @endif
+                            <div class="row justify-content-center">
+                                 
+                                <div class="col-lg-2 col-4">
+
+                                    <div class="small-box bg-info">
+                                        <div class="inner">
+                                            <h3 class="counter-value">{{ $enquiry_count }}</h3>
+                                            <p>Enquiry</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fas nav-icon fa-vote-yea"></i>
+                                        </div>
+                                      {{--  <a href="{{ route('admin.sellvehicle.index') }}" class="small-box-footer">More
+                                            info
+                                            <i class="fas fa-arrow-circle-right"></i></a> --}}
+                                    </div>
+                                </div>
+                                 @if ($roleTitle == 1)
+                                    <div class="col-lg-2 col-4">
+
+                                    <div class="small-box bg-primary">
+                                        <div class="inner">
+                                            <h3 class="counter-value">{{ $statusCounts->Underwriting }}<sup
+                                                    style="font-size: 20px"></sup></h3>
+                                            <p>Underwriting</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fas nav-icon fa-vote-yea"></i>
+                                        </div>
+                                      
+                                    </div>
+                                </div>
+                                @endif
+                                
+                                <div class="col-lg-2 col-4">
+
+                                    <div class="small-box bg-warning">
+                                        <div class="inner">
+                                            <h3 class="counter-value">{{ $statusCounts->Processing }}</h3>
+                                            <p>Processing</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fas nav-icon fa-vote-yea"></i>
+                                        </div>
+                                       
+                                    </div>
+                                </div>
+                                 @if ($roleTitle == 1)
+                                    <div class="col-lg-2 col-4">
+
+                                    <div class="small-box bg-danger">
+                                        <div class="inner">
+                                            <h3 class="counter-value">{{ $statusCounts->Completions  }}</h3>
+                                            <p>Submitted</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fas nav-icon fa-vote-yea"></i>
+                                        </div>
+                                     
+                                    </div>
+                                </div>
+                                 @endif
+                                 
+                                <div class="col-lg-2 col-4">
+
+                                    <div class="small-box bg-success">
+                                        <div class="inner">
+                                            @php
+                                                if ($roleTitle != 1){
+                                                
+                                                    $completed = ($statusCounts->Completed ?? 0 ) + ($statusCounts->Completions ?? 0 )  ;
+                                                
+                                                }else{
+                                                  $completed = ($statusCounts->Completed ?? 0 ) ;
+                                                
+                                                }
+                                             @endphp
+                                            <h3 class="counter-value">{{$completed ?? 0}}</h3>
+                                            <p>Completed</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fas nav-icon fa-vote-yea"></i>
+                                        </div>
+                                     
+                                    </div>
+                                </div>
+
                             </div>
-                            <div class="d-flex align-items-center mr-3">
-                                <div class="color-box" style="background-color: #007bff7a;"></div>
-                                <div class="ml-2">No order Day</div>
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <div class="color-box" style="background-color: #17a2b8;"></div>
-                                <div class="ml-2">Today</div>
-                            </div>
+                            
                         </div>
                     </div>
-
-                    <div class="table-responsive" style="padding: .5rem;">
-                        <table class="table table-bordered" style="margin-bottom: 0;">
-                            <thead>
-                                <tr>
-                                    @foreach ($weekdays as $weekday)
-                                        <th class="text-center table-primary">{{ $weekday }}</th>
-                                    @endforeach
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    @for ($i = 0; $i < $firstDayOfWeek; $i++)
-                                        <td></td>
-                                    @endfor
-
-                                    @for ($day = 1; $day <= $numDays; $day++)
-                                        @php
-                                            $currentDate = DateTime::createFromFormat(
-                                                'Y-m-d',
-                                                $year . '-' . $month . '-' . $day,
-                                            );
-                                            $isCurrentDate = $currentDate->format('Y-m-d') === date('Y-m-d');
-                                            $eventDayOrder = null;
-                                        @endphp
-
-                                        @foreach ($events as $event)
-                                            @php
-                                                $eventDate = new DateTime($event->date);
-
-                                                if ($currentDate->format('Y-m-d') === $eventDate->format('Y-m-d')) {
-                                                    $eventDayOrder = $event->dayorder;
-                                                    break;
-                                                }
-                                            @endphp
-                                        @endforeach
-
-                                        @if (($day + $firstDayOfWeek - 1) % 7 === 0)
-                                </tr>
-                                <tr>
-        @endif
-
-        <td
-            style="
-                                        text-align: center;
-                                        {{ $isCurrentDate ? 'background-color: #17a2b8;' : '' }}
-                                        {{ $eventDayOrder == 0 && !$isCurrentDate ? 'background-color: ;' : '' }}
-                                        {{ $eventDayOrder == 1 && !$isCurrentDate ? 'background-color: #FFD5D6;' : '' }}
-                                        {{ $eventDayOrder == 2 && !$isCurrentDate ? 'background-color: #FFD5D6;' : '' }}
-                                        {{ $eventDayOrder == 3 && !$isCurrentDate ? 'background-color: #FFD5D6;' : '' }}
-                                        {{ $eventDayOrder == 4 && !$isCurrentDate ? 'background-color: #FFD5D6;' : '' }}
-                                        {{ $eventDayOrder == 5 && !$isCurrentDate ? 'background-color: #007bff7a;' : '' }}">
-            @if ($eventDayOrder == 0)
-                <span style="color: rgb(5, 5, 5)">{{ $day }}</span>
-            @elseif ($eventDayOrder == 1 || $eventDayOrder == 2 || $eventDayOrder == 3)
-                <span>{{ $day }}</span>
-            @else
-                {{ $day }}
-            @endif
-        </td>
-        @endfor
-
-        @while (($day + $firstDayOfWeek - 1) % 7 !== 0)
-            <td></td>
-            @php $day++; @endphp
-        @endwhile
-        </tr>
-        </tbody>
-        </table>
+                </div>
+            </div>
         </div>
-        </div>
-        </div>
-        @endif --}}
-    @endcan
-
+        
+        
+        
+        @include('partials.homecontent')
+        
+ @include('admin.application.partials.clientassignModel')
 @endsection
 @section('scripts')
     @parent
     <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.js'></script>
-    {{-- <script>
-        $(document).ready(function() {
-            // page is now ready, initialize the calendar...
-            events = {!! json_encode($events) !!};
-            $('#calendar').fullCalendar({
-                // put your options and callbacks here
-                events: events,
-                eventBackgroundColor: '#4fc3f7'
-            })
-        });
-    </script> --}}
-    {{-- <script src="your-js-file.js"></script> --}}
+    <script>
+    let $loading = $('.loading-overlay')
+    //  $(document).ready(function() {
+    //   // Function to initialize the DataTable
+    //         function callAjax() {
+    //             if ($.fn.DataTable.isDataTable('.datatable-caseList')) {
+    //                 $('.datatable-caseList').DataTable().destroy();
+    //             }
+    
+    //             let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
+    //             dtButtons.splice(0, 10);
+    //             let dtOverrideGlobals = {
+    //                 buttons: dtButtons,
+    //                 retrieve: true,
+    //                 aaSorting: [],
+    //                 ajax: {
+    //                     url: "{{ route('admin.home.index') }}",
+    //                 },
+    //                 columns: [
+    //                     { data: 'placeholder', name: 'placeholder' },
+    //                     { data: 'id', name: 'id' },
+    //                     { data: 'ref_no', name: 'ref_no' },
+    //                     { data: 'customer_id', name: 'customer_id' },
+    //                     // { data: 'loan_type_id', name: 'loan_type_id' },
+    //                     { data: 'assigned_client_id', name: 'assigned_client_id' },
+                       
+    //                     { data: 'actions', name: 'actions' }
+    //                 ],
+    //                 orderCellsTop: true,
+    //                 order: [[1, 'desc']],
+    //                 pageLength: 10,
+                   
+    //             };
+        
+    //             let table = $('.datatable-caseList').DataTable(dtOverrideGlobals);
+    //             $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e) {
+    //                 $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
+    //             });
+    //         }
+            
+    //          function callAjax2() {
+    //             if ($.fn.DataTable.isDataTable('.datatable-caseList2')) {
+    //                 $('.datatable-caseList2').DataTable().destroy();
+    //             }
+    
+    //             let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
+    //             dtButtons.splice(0, 10);
+    //             let dtOverrideGlobals = {
+    //                 buttons: dtButtons,
+    //                 retrieve: true,
+    //                 aaSorting: [],
+    //                 ajax: {
+    //                     url: "{{ route('admin.home.CompletedJob') }}",
+    //                 },
+    //                 columns: [
+    //                     { data: 'placeholder', name: 'placeholder' },
+    //                     { data: 'id', name: 'id' },
+    //                     { data: 'ref_no', name: 'ref_no' },
+    //                     { data: 'customer_id', name: 'customer_id' },
+    //                     // { data: 'loan_type_id', name: 'loan_type_id' },
+    //                     { data: 'assigned_client_id', name: 'assigned_client_id' },
+                       
+    //                     { data: 'actions', name: 'actions' }
+    //                 ],
+    //                 orderCellsTop: true,
+    //                 order: [[1, 'desc']],
+    //                 pageLength: 10,
+                   
+    //             };
+        
+    //             let table = $('.datatable-caseList2').DataTable(dtOverrideGlobals);
+    //             $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e) {
+    //                 $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
+    //             });
+    //         }
+            
+            
+            
+    //          callAjax().then(() => {
+    //             callAjax2();
+    //         });
+    //  });
+    
+  
+    function callAjax() {
+        if ($.fn.DataTable.isDataTable('.datatable-caseList')) {
+            $('.datatable-caseList').DataTable().destroy();
+        }
 
-     {{-- <script>
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
+        let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons);
+        dtButtons.splice(0, 10);
+        let dtOverrideGlobals = {
+            buttons: dtButtons,
+            retrieve: true,
+            aaSorting: [],
+            ajax: {
+                url: "{{ route('admin.home.index') }}",
             },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
+            columns: [
+                { data: 'placeholder', name: 'placeholder' },
+                { data: 'id', name: 'id' },
+                { data: 'ref_no', name: 'ref_no' },
+                { data: 'customer_id', name: 'customer_id' },
+                // { data: 'loan_type_id', name: 'loan_type_id' },
+                @if( $roleTitle == 1)
+                { data: 'assigned_client_id', name: 'assigned_client_id' },
+                @endif
+                { data: 'actions', name: 'actions' }
+            ],
+            orderCellsTop: true,
+            order: [[1, 'desc']],
+            pageLength: 10,
+        };
+
+        $('.datatable-caseList').DataTable(dtOverrideGlobals);
+
+        // Adjust columns on tab change
+        $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e) {
+            $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
         });
 
-        $(document).ready(function() {
-            $('.counter-value').each(function() {
-                $(this).prop('Counter', 0).animate({
-                    Counter: $(this).text()
-                }, {
-                    duration: 3500,
-                    easing: 'swing',
-                    step: function(now) {
-                        $(this).text(Math.ceil(now));
-                    }
-                });
-            });
+        // Call callAjax2() directly after callAjax() completes
+        callAjax2();
+    }
+    
+    function callAjax2() {
+        if ($.fn.DataTable.isDataTable('.datatable-caseList2')) {
+            $('.datatable-caseList2').DataTable().destroy();
+        }
+
+        let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons);
+        dtButtons.splice(0, 10);
+        let dtOverrideGlobals = {
+            buttons: dtButtons,
+            retrieve: true,
+            aaSorting: [],
+            ajax: {
+                url: "{{ route('admin.home.CompletedJob') }}",
+            },
+            columns: [
+                { data: 'placeholder', name: 'placeholder' },
+                { data: 'id', name: 'id' },
+                { data: 'ref_no', name: 'ref_no' },
+                { data: 'customer_id', name: 'customer_id' },
+                // { data: 'loan_type_id', name: 'loan_type_id' },
+                @if( $roleTitle == 1)
+                { data: 'assigned_client_id', name: 'assigned_client_id' },
+                @endif
+                { data: 'actions', name: 'actions' }
+            ],
+            orderCellsTop: true,
+            order: [[1, 'desc']],
+            pageLength: 10,
+        };
+
+        $('.datatable-caseList2').DataTable(dtOverrideGlobals);
+
+        // Adjust columns on tab change
+        $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e) {
+            $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
         });
-    </script>  --}}
+        
+         callAjax3();
+    }
+    
+     function callAjax3() {
+        if ($.fn.DataTable.isDataTable('.datatable-caseList3')) {
+            $('.datatable-caseList3').DataTable().destroy();
+        }
+
+        let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons);
+        dtButtons.splice(0, 10);
+        let dtOverrideGlobals = {
+            buttons: dtButtons,
+            retrieve: true,
+            aaSorting: [],
+            ajax: {
+                url: "{{ route('admin.home.CanceledJob') }}",
+            },
+            columns: [
+                { data: 'placeholder', name: 'placeholder' },
+                { data: 'id', name: 'id' },
+                { data: 'ref_no', name: 'ref_no' },
+                { data: 'customer_id', name: 'customer_id' },
+                // { data: 'loan_type_id', name: 'loan_type_id' },
+                @if( $roleTitle == 1)
+                { data: 'assigned_client_id', name: 'assigned_client_id' },
+                @endif
+                { data: 'actions', name: 'actions' }
+            ],
+            orderCellsTop: true,
+            order: [[1, 'desc']],
+            pageLength: 10,
+        };
+
+        $('.datatable-caseList3').DataTable(dtOverrideGlobals);
+
+        // Adjust columns on tab change
+        $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e) {
+            $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
+        });
+    }
+    
+    // Call callAjax() on document ready
+        callAjax();
+    
+       function callAjax4() {
+                if ($.fn.DataTable.isDataTable('.datatable-caseList4')) {
+                    $('.datatable-caseList4').DataTable().destroy();
+                }
+                
+                let dtOverrideGlobals = {
+                    retrieve: true,
+                    aaSorting: [],
+                    ajax: {
+                        url: "{{ route('admin.home.EnquiryJob') }}",
+                    },
+                    columns: [
+                        { data: 'placeholder', name: 'placeholder' },
+                        { data: 'id', name: 'id' },
+                        // { data: 'loan_category_type', name: 'loan_category_type' },
+                        // { data: 'client_loan_amount', name: 'client_loan_amount' },
+                        { data: 'client_first_name', name: 'client_first_name' },
+                        // { data: 'client_email', name: 'client_email' },
+                        // { data: 'client_phone', name: 'client_phone' },
+                         @if($roleTitle == 1)
+                            { data: 'created_by', name: 'created_by' },
+                         @endif
+                        // { data: 'created_date', name: 'created_date' },
+                        // { data: 'status', name: 'status' },
+                        { data: 'actions', name: 'actions' }
+                    ],
+                    orderCellsTop: true,
+                    order: [[1, 'desc']],
+                    pageLength: 10,
+                };
+                
+                let table = $('.datatable-caseList4').DataTable(dtOverrideGlobals);
+                $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e) {
+                    $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
+                });
+            }
+            
+            callAjax4();
+  
+
+    </script>
+    @include('admin.application_stage.partials.caseList')
+ 
 @endsection
